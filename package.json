@@ -1,0 +1,21 @@
+{
+  "name": "veil",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "watch": "tsx scripts/watch.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@types/node": "^22.8.6",
+    "axios": "^1.7.7",
+    "esbuild": "^0.24.0",
+    "tsx": "^4.19.2",
+    "ws": "^8.18.0"
+  }
+}
