@@ -3,6 +3,7 @@ import { abuseWebpack } from "../webpack/webpack";
 
 // @ts-ignore
 let dispatcher: Dispatcher;
+let dispatcherBackup: Dispatcher;
 
 export enum DispatcherEvent {
   MESSAGE_CREATE = "MESSAGE_CREATE",
@@ -32,9 +33,9 @@ export const getDispatcher = () => {
     throw new Error("Dispatcher not found");
   }
 
-  dispatcher = foundDispatcher as Dispatcher;
+  dispatcherBackup = foundDispatcher;
 
-  const dispatcherProxy = new Proxy(dispatcher, {
+  const dispatcherProxy = new Proxy(foundDispatcher, {
     get(target, prop, receiver) {
       if (prop === "dispatch" && logAllDispatches) {
         return (action: { type: DispatcherEvent | `${DispatcherEvent}` | (string & {}) } & Record<string, unknown>) => {
@@ -42,12 +43,35 @@ export const getDispatcher = () => {
           return Reflect.get(target, prop, receiver).call(target, action);
         };
       }
-      
+
       return Reflect.get(target, prop, receiver);
     }
   });
 
-  dispatcher = dispatcherProxy;
+  abuseWebpack((c) => {
+    for (const chunk of Object.values(c)) {
+      if (chunk.exports?.Z?.flushWaitQueue) {
+        chunk.exports.Z = dispatcherProxy;
+        break;
+      }
+    }
+  });
 
+  dispatcher = dispatcherProxy;
   return dispatcherProxy;
 }
+
+export const unload = () => {
+  if (dispatcherBackup) {
+    abuseWebpack((c) => {
+      for (const chunk of Object.values(c)) {
+        if (chunk.exports?.Z?.flushWaitQueue) {
+          chunk.exports.Z = dispatcherBackup;
+          break;
+        }
+      }
+    });
+
+    dispatcher = dispatcherBackup;
+  }
+};

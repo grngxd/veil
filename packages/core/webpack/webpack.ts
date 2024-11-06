@@ -25,4 +25,4 @@ export const abuseWebpack = (
     }]);
 
     return _return;
-};
+}; 
