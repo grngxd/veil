@@ -5,8 +5,18 @@ a bad discord client mod inspired by [shelter]("https://shelter.uwu.network").
 - none lmao (yet) (magic 8ball says: "outlook not so good")
 
 ## installation
-(proper instructions & installer coming soon)
-1. get the veil.js from the latest release / out folder of your build
-2. run discord with the flag `--remote-debugging-port=4444`
-3. run the veil.js with node
-4. enjoy
+<details>
+    <summary>discord desktop client</summary>
+
+1. download the `veil.js` file from the latest release or the `out` folder of your build.
+2. start Discord with the flag `--remote-debugging-port=4444`.
+3. execute the `veil.js` file using ./scripts/inject.js. (might have to edit the file location in there because im lazy)
+4. finished
+
+</details>
+
+<details>
+    <summary>discord web client</summary>
+1. copy & paste the contents of `veil.js` into the console of the discord web client.
+2. youre done
+</details>
