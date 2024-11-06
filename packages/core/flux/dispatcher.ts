@@ -1,3 +1,4 @@
+import store from "../../store";
 import { log } from "../../util";
 import { abuseWebpack } from "../webpack/webpack";
 
@@ -17,8 +18,6 @@ type Dispatcher = {
   dispatch: (action: { type: DispatcherEvent | `${DispatcherEvent}` | (string & {}) } & Record<string, unknown>) => void;
 }
 
-const logAllDispatches = true;
-
 export const getDispatcher = () => {
   if (dispatcher) return dispatcher;
 
@@ -36,9 +35,10 @@ export const getDispatcher = () => {
 
   dispatcherBackup = foundDispatcher;
 
+  // we use a proxy to overwrite the dispatch method to log all dispatches
   const dispatcherProxy = new Proxy(foundDispatcher, {
     get(target, prop, receiver) {
-      if (prop === "dispatch" && logAllDispatches) {
+      if (prop === "dispatch" && store.$logFluxDispatches.get()) {
         return (action: { type: DispatcherEvent | `${DispatcherEvent}` | (string & {}) } & Record<string, unknown>) => {
           log(action);
           return Reflect.get(target, prop, receiver).call(target, action);

@@ -1,4 +1,3 @@
-
 // just to make typescript happy
 interface Window {
     veil: {

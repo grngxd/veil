@@ -9,10 +9,16 @@ export const inject = async () => {
         console.log("WebSocket Address:", wsURL);
     
         const ws = new WebSocket(wsURL);
-    
         const code = fs.readFileSync('./out/veil.js', 'utf-8');
-    
+        
+        const timeout = setTimeout(() => {
+            console.error("WebSocket connection timed out.");
+            ws.terminate();
+            process.exit(1);
+        }, 60000); // 1 minute timeout
+
         ws.on('open', () => {
+            clearTimeout(timeout);
             console.log('Connected to Discord WebSocket');
             const payload = {
                 id: 1,
@@ -39,6 +45,17 @@ export const inject = async () => {
                 console.error("The inspector was detached while evaluating the payload.");
                 process.exit(1);
             }
+        });
+
+        ws.on('error', (error) => {
+            clearTimeout(timeout);
+            console.error("WebSocket error:", error);
+            process.exit(1);
+        });
+
+        ws.on('close', () => {
+            clearTimeout(timeout);
+            console.log("WebSocket connection closed.");
         });
     
     } catch (error) {

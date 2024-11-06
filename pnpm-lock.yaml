@@ -32,12 +32,6 @@ importers:
 
   packages/core:
     dependencies:
-      '@cumjar/websmack':
-        specifier: ^1.2.0
-        version: 1.2.0
-      flux:
-        specifier: ^4.0.4
-        version: 4.0.4(react@17.0.2)
       preact:
         specifier: ^10.24.3
         version: 10.24.3
@@ -45,6 +39,18 @@ importers:
       '@types/flux':
         specifier: ^3.1.14
         version: 3.1.14
+      flux:
+        specifier: ^4.0.4
+        version: 4.0.4(react@17.0.2)
+
+  packages/store:
+    dependencies:
+      dexie:
+        specifier: ^4.0.9
+        version: 4.0.9
+      nanostores:
+        specifier: ^0.11.3
+        version: 0.11.3
 
   packages/util: {}
 
@@ -104,9 +110,6 @@ packages:
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [win32]
-
-  '@cumjar/websmack@1.2.0':
-    resolution: {integrity: sha512-CtNQ3/EdeEAEx8bAPi3eKNCC41P88u40ja69TwpVerMZ93l0Kk7NpfvqY+YW50AvBN90FdmfLCRsJYzPIxQ90A==}
 
   '@esbuild/aix-ppc64@0.23.1':
     resolution: {integrity: sha512-6VhYk1diRqrhBAqpJEdjASR/+WVRtfjpqKuNw11cLiaWpAT/Uu+nokB+UJnevzy/P9C/ty6AOe0dwueMrGh/iQ==}
@@ -434,6 +437,9 @@ packages:
     resolution: {integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==}
     engines: {node: '>=0.4.0'}
 
+  dexie@4.0.9:
+    resolution: {integrity: sha512-VQG1huEVSAdDZssb9Bb9mFy+d3jAE0PT4d1nIRYlT46ip1fzbs1tXi0SlUayRDgV3tTbJG8ZRqAo2um49gtynA==}
+
   dotenv@16.4.5:
     resolution: {integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==}
     engines: {node: '>=12'}
@@ -497,6 +503,10 @@ packages:
   mime-types@2.1.35:
     resolution: {integrity: sha512-ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw==}
     engines: {node: '>= 0.6'}
+
+  nanostores@0.11.3:
+    resolution: {integrity: sha512-TUes3xKIX33re4QzdxwZ6tdbodjmn3tWXCEc1uokiEmo14sI1EaGYNs2k3bU2pyyGNmBqFGAVl6jAGWd06AVIg==}
+    engines: {node: ^18.0.0 || >=20.0.0}
 
   node-fetch@2.7.0:
     resolution: {integrity: sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==}
@@ -599,8 +609,6 @@ snapshots:
 
   '@biomejs/cli-win32-x64@1.9.4':
     optional: true
-
-  '@cumjar/websmack@1.2.0': {}
 
   '@esbuild/aix-ppc64@0.23.1':
     optional: true
@@ -790,6 +798,8 @@ snapshots:
 
   delayed-stream@1.0.0: {}
 
+  dexie@4.0.9: {}
+
   dotenv@16.4.5: {}
 
   esbuild@0.23.1:
@@ -900,6 +910,8 @@ snapshots:
   mime-types@2.1.35:
     dependencies:
       mime-db: 1.52.0
+
+  nanostores@0.11.3: {}
 
   node-fetch@2.7.0:
     dependencies:

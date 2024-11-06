@@ -8,7 +8,7 @@ import { inject } from './inject';
         minify: true,
         outfile: 'out/veil.js',
         platform: 'browser',
-        target: 'ESNext',
+        target: 'ES2020',
         format: 'iife',
         sourcemap: true,
         plugins: [{
