@@ -8,7 +8,8 @@ let dispatcherBackup: Dispatcher;
 export enum DispatcherEvent {
   MESSAGE_CREATE = "MESSAGE_CREATE",
   MESSAGE_DELETE = "MESSAGE_DELETE",
-  MESSAGE_UPDATE = "MESSAGE_UPDATE"
+  MESSAGE_UPDATE = "MESSAGE_UPDATE",
+  WINDOW_FOCUS = "WINDOW_FOCUS"
 }
 
 type Dispatcher = {

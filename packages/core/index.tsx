@@ -1,5 +1,5 @@
 import * as util from "../util";
-import { log } from "../util";
+import { log, warn } from "../util";
 import * as veil from "../veil";
 import * as flux from "./flux";
 
@@ -24,9 +24,9 @@ window.veil = {
         Promise.all([
             flux.dispatcher.unload(),
         ]).then(() => {
-            log("veil unloaded.");
+            warn("veil unloaded.");
         });
-    }
+    } 
 };
 
 log(`veil loaded in ${(performance.now() - initial).toFixed(1)}ms!`);
