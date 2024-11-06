@@ -29,6 +29,16 @@ export const inject = async () => {
     
         ws.on('message', (data) => {
             console.log("Message from Discord WebSocket:", data.toString());
+
+            if (data.method === "Runtime.exceptionThrown") {
+                console.error("An exception was thrown while evaluating the payload:", data.params.exceptionDetails);
+                process.exit(1);
+            }
+
+            if (data.method === "Inspector.detached") {
+                console.error("The inspector was detached while evaluating the payload.");
+                process.exit(1);
+            }
         });
     
     } catch (error) {
