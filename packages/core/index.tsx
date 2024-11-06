@@ -4,21 +4,24 @@ import { log, warn } from "../util";
 import * as veil from "../veil";
 import * as electron from "./electron";
 import * as flux from "./flux";
+import * as settings from "./settings";
 
 if (window?.veil?.unload) {
     // unload any previous instance(s) of veil that may still be running
     window.veil.unload();
 }
 
-electron.handleStorage();
-store.load();
-
 const initial = performance.now();
-
-flux.stores.init();
 
 // IMPORTANT!!!: this MUST be called at least once
 flux.dispatcher.getDispatcher();
+
+electron.handleStorage();
+store.load();
+
+flux.stores.init();
+
+settings.init();
 
 window.veil = {
     util: util,
@@ -33,6 +36,7 @@ window.veil = {
         window.veil = null;
         Promise.all([
             flux.dispatcher.unload(),
+            settings.unload(),
         ]).then(() => {
             warn("veil unloaded.");
         });
@@ -40,3 +44,7 @@ window.veil = {
 };
 
 log(`veil loaded in ${(performance.now() - initial).toFixed(1)}ms!`);
+
+flux.dispatcher.getDispatcher().subscribe("VEIL_SETTINGS", (data) => {
+    log(["Settings:", data]);
+});

@@ -11,7 +11,7 @@ type Dispatcher = {
   dispatch: (action: { type: DispatcherEvent | `${DispatcherEvent}` | (string & {}) } & Record<string, unknown>) => void;
 }
 
-export const getDispatcher = () => {
+export const getDispatcher: () => Dispatcher = () => {
   if (dispatcher) return dispatcher;
 
   const foundDispatcher = abuseWebpack((c) => {
