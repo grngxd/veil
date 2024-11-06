@@ -11,7 +11,6 @@ if (window?.veil?.unload) {
 }
 
 electron.handleStorage();
-
 store.load();
 
 const initial = performance.now();
