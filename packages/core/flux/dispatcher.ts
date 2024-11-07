@@ -4,11 +4,12 @@ import { abuseWebpack } from "../webpack/webpack";
 
 // @ts-ignore
 let dispatcher: Dispatcher;
-let dispatcherBackup: Dispatcher
+let dispatcherBackup: Dispatcher;
 
 type Dispatcher = {
   subscribe: (event: DispatcherEvent | `${DispatcherEvent}` | (string & {}), callback: (data: unknown) => void) => void;
   dispatch: (action: { type: DispatcherEvent | `${DispatcherEvent}` | (string & {}) } & Record<string, unknown>) => void;
+  waitForDispatch: (event: DispatcherEvent | `${DispatcherEvent}` | (string & {})) => Promise<unknown>;
 }
 
 export const getDispatcher: () => Dispatcher = () => {
@@ -35,6 +36,18 @@ export const getDispatcher: () => Dispatcher = () => {
         return (action: { type: DispatcherEvent | `${DispatcherEvent}` | (string & {}) } & Record<string, unknown>) => {
           log(action);
           return Reflect.get(target, prop, receiver).call(target, action);
+        };
+      }
+
+      if (prop === "waitForDispatch") {
+        return (event: DispatcherEvent | `${DispatcherEvent}` | (string & {})) => {
+          return new Promise((resolve) => {
+            const callback = (data: unknown) => {
+              resolve(data);
+              target.unsubscribe(event, callback);
+            };
+            target.subscribe(event, callback);
+          });
         };
       }
 
