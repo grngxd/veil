@@ -35,16 +35,19 @@ importers:
       preact:
         specifier: ^10.24.3
         version: 10.24.3
-      react:
-        specifier: ^18.3.1
-        version: 18.3.1
     devDependencies:
+      '@stencil/core':
+        specifier: ^4.22.3
+        version: 4.22.3
       '@types/flux':
         specifier: ^3.1.14
         version: 3.1.14
       '@types/react':
         specifier: ^18.3.12
         version: 18.3.12
+      '@types/react-dom':
+        specifier: ^18.3.1
+        version: 18.3.1
       flux:
         specifier: ^4.0.4
         version: 4.0.4(react@18.3.1)
@@ -405,6 +408,11 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@stencil/core@4.22.3':
+    resolution: {integrity: sha512-dYaletX938WgEA2oMROLdh8wpUn1MgBx2zg5kYqwuUR8aua4Gy9EqGQ3zBu1AvL5MzLlZC+lMlxe/g5Dg1ldpw==}
+    engines: {node: '>=16.0.0', npm: '>=7.10.0'}
+    hasBin: true
+
   '@types/fbemitter@2.0.35':
     resolution: {integrity: sha512-Xem6d7qUfmouCHntCrRYgDBwbf+WWRd6G+7WEFlEZFZ67LZXiYRvT2LV8wcZa6mIaAil95+ABQdKgB6hPIsnng==}
 
@@ -416,6 +424,9 @@ packages:
 
   '@types/prop-types@15.7.13':
     resolution: {integrity: sha512-hCZTSvwbzWGvhqxp/RqVqwU999pBf2vp7hzIjiYOsl8wqOmUxkQ6ddw1cV3l8811+kdUFus/q4d1Y3E3SyEifA==}
+
+  '@types/react-dom@18.3.1':
+    resolution: {integrity: sha512-qW1Mfv8taImTthu4KoXgDfLuk4bydU6Q/TkADnDWWHwi4NX4BR+LWfTp2sVmTqRrsHvyDDTelgelxJ+SsejKKQ==}
 
   '@types/react@18.3.12':
     resolution: {integrity: sha512-D2wOSq/d6Agt28q7rSI3jhU7G6aiuzljDGZ2hTZHIkrTLUI+AF3WMeKkEZ9nN2fkBAlcktT6vcZjDFiIhMYEQw==}
@@ -760,6 +771,8 @@ snapshots:
   '@esbuild/win32-x64@0.24.0':
     optional: true
 
+  '@stencil/core@4.22.3': {}
+
   '@types/fbemitter@2.0.35': {}
 
   '@types/flux@3.1.14':
@@ -772,6 +785,10 @@ snapshots:
       undici-types: 6.19.8
 
   '@types/prop-types@15.7.13': {}
+
+  '@types/react-dom@18.3.1':
+    dependencies:
+      '@types/react': 18.3.12
 
   '@types/react@18.3.12':
     dependencies:

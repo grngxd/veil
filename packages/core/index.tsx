@@ -21,19 +21,13 @@ store.load();
 
 flux.stores.init();
 
-let s = false;
-let cancelled = false;
-flux.dispatcher.getDispatcher().waitForDispatch("USER_SETTINGS_MODAL_OPEN").then(() => {
-    if (cancelled) return;
-    if (s) return;
-    s = true;
-    settings.init();
-}); 
+settings.init();
 
 window.veil = {
     util: util, 
     veil: veil,
     flux: flux,
+    settings: settings,
     // electron: {
     //     localStorage: localStorage,
     //     sessionStorage: sessionStorage
@@ -45,7 +39,6 @@ window.veil = {
             flux.dispatcher.unload(),
             settings.unload(), 
         ]).then(() => {
-            cancelled = true; 
             warn("veil unloaded.");
         });
     }

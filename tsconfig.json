@@ -4,14 +4,14 @@
         "module": "ESNext",
         "moduleResolution": "node",
         "jsx": "react",
-        "jsxFactory": "React.createElement",
-        "jsxFragmentFactory": "React.Fragment",
+        "jsxFactory": "h",
+        "jsxFragmentFactory": "Fragment",
         "outDir": "./out",
         "rootDir": "./packages",
         "strict": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true
+        "forceConsistentCasingInFileNames": true,
     },
     "include": ["packages/**/*"],
     "exclude": ["node_modules", "out"]
