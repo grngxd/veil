@@ -1,5 +1,5 @@
 {
-  "name": "core",
+  "name": "react",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,11 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@emotion/css": "^11.13.5",
     "preact": "^10.24.3"
-  },
-  "devDependencies": {
-    "@stencil/core": "^4.22.3",
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0"
   }
 }

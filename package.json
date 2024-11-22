@@ -18,5 +18,8 @@
     "esbuild": "^0.24.0",
     "tsx": "^4.19.2",
     "ws": "^8.18.0"
+  },
+  "dependencies": {
+    "esbuild-sass-plugin": "^3.3.1"
   }
 }

@@ -1,10 +1,9 @@
+import { log } from "+util";
 import store from "../../store";
-import { log } from "../../util";
 import { abuseWebpack } from "../webpack/webpack";
 
-// @ts-ignore
-let dispatcher: Dispatcher;
-let dispatcherBackup: Dispatcher;
+let dispatcher: Dispatcher | null = null;
+let dispatcherBackup: Dispatcher | null = null;
 
 type Dispatcher = {
   subscribe: (event: DispatcherEvent | `${DispatcherEvent}` | (string & {}), callback: (data: unknown) => void) => void;
@@ -30,7 +29,6 @@ export const getDispatcher: () => Dispatcher = () => {
 
   dispatcherBackup = foundDispatcher;
 
-  // we use a proxy to overwrite the dispatch method to log all dispatches
   const dispatcherProxy = new Proxy(foundDispatcher, {
     get(target, prop, receiver) {
       if (prop === "dispatch" && store.$logFluxDispatches.get()) {
@@ -67,7 +65,7 @@ export const getDispatcher: () => Dispatcher = () => {
 
   dispatcher = dispatcherProxy;
   return dispatcherProxy;
-}
+};
 
 export const unload = () => {
   if (dispatcherBackup) {

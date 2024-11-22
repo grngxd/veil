@@ -12,6 +12,9 @@
         "esModuleInterop": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
+        "paths": {
+            "+*": ["./packages/*"]
+        }
     },
     "include": ["packages/**/*"],
     "exclude": ["node_modules", "out"]

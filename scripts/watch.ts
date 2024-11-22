@@ -1,4 +1,5 @@
 import { context } from 'esbuild';
+import { sassPlugin } from 'esbuild-sass-plugin';
 import { inject } from './inject';
 
 (async () => {
@@ -19,7 +20,8 @@ import { inject } from './inject';
                     inject();
                 })
             },
-        }],
+        },
+        sassPlugin()],
     })
 
     await ctx.watch()

@@ -1,6 +1,6 @@
+import * as util from "+util";
+import { log, warn } from "+util";
 import * as store from "../store";
-import * as util from "../util";
-import { log, warn } from "../util";
 import * as veil from "../veil";
 import * as electron from "./electron";
 import * as flux from "./flux";
@@ -21,7 +21,7 @@ store.load();
 
 flux.stores.init();
 
-settings.init();
+settings.init();                                                            
 
 window.veil = {
     util: util, 
