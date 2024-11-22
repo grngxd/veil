@@ -35,13 +35,19 @@ importers:
       preact:
         specifier: ^10.24.3
         version: 10.24.3
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
     devDependencies:
       '@types/flux':
         specifier: ^3.1.14
         version: 3.1.14
+      '@types/react':
+        specifier: ^18.3.12
+        version: 18.3.12
       flux:
         specifier: ^4.0.4
-        version: 4.0.4(react@17.0.2)
+        version: 4.0.4(react@18.3.1)
 
   packages/store:
     dependencies:
@@ -530,8 +536,8 @@ packages:
   proxy-from-env@1.1.0:
     resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
 
-  react@17.0.2:
-    resolution: {integrity: sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==}
+  react@18.3.1:
+    resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
     engines: {node: '>=0.10.0'}
 
   resolve-pkg-maps@1.0.0:
@@ -876,11 +882,11 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  flux@4.0.4(react@17.0.2):
+  flux@4.0.4(react@18.3.1):
     dependencies:
       fbemitter: 3.0.0
       fbjs: 3.0.5
-      react: 17.0.2
+      react: 18.3.1
     transitivePeerDependencies:
       - encoding
 
@@ -927,10 +933,9 @@ snapshots:
 
   proxy-from-env@1.1.0: {}
 
-  react@17.0.2:
+  react@18.3.1:
     dependencies:
       loose-envify: 1.4.0
-      object-assign: 4.1.1
 
   resolve-pkg-maps@1.0.0: {}
 

@@ -6,6 +6,7 @@ export type WebpackChunk = {
 export type WebpackModule = {
     id: number;
     loaded: boolean;
+    default: any;
     exports: { [key: string]: any | undefined };
 }
 
@@ -16,7 +17,7 @@ export const abuseWebpack = (
 ) => {
     let _return: any = null;
 
-    window.webpackChunkdiscord_app.push([[Date.now()], {}, (req: any) => {
+    window.webpackChunkdiscord_app?.push([[Date.now()], {}, (req: any) => {
         if (violence) {
             _return = violence(req.c);
         } else {

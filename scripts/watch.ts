@@ -5,7 +5,7 @@ import { inject } from './inject';
     const ctx = await context({
         entryPoints: ['packages/core/index.tsx'],
         bundle: true,
-        minify: true,
+        // minify: true,
         outfile: 'out/veil.js',
         platform: 'browser',
         target: 'ES2020',

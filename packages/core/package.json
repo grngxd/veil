@@ -10,10 +10,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "preact": "^10.24.3"
+    "preact": "^10.24.3",
+    "react": "^18.3.1"
   },
   "devDependencies": {
     "@types/flux": "^3.1.14",
+    "@types/react": "^18.3.12",
     "flux": "^4.0.4"
   }
 }

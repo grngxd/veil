@@ -9,7 +9,6 @@ export const inject = async () => {
 
     const ws = new WebSocket(wsURL);
     const code = fs.readFileSync('./out/veil.js', 'utf-8');
-    console.log(code);
     
     const timeout = setTimeout(() => {
         console.error("WebSocket connection timed out.");
@@ -27,7 +26,6 @@ export const inject = async () => {
                 expression: `${code}`
             }
         };
-        console.log(code);
 
         ws.send(JSON.stringify(payload));
         console.log("Payload sent.");

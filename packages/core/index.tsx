@@ -21,10 +21,17 @@ store.load();
 
 flux.stores.init();
 
-settings.init();
+let s = false;
+let cancelled = false;
+flux.dispatcher.getDispatcher().waitForDispatch("USER_SETTINGS_MODAL_OPEN").then(() => {
+    if (cancelled) return;
+    if (s) return;
+    s = true;
+    settings.init();
+}); 
 
 window.veil = {
-    util: util,
+    util: util, 
     veil: veil,
     flux: flux,
     // electron: {
@@ -36,12 +43,13 @@ window.veil = {
         window.veil = null;
         Promise.all([
             flux.dispatcher.unload(),
-            settings.unload(),
+            settings.unload(), 
         ]).then(() => {
+            cancelled = true; 
             warn("veil unloaded.");
         });
     }
-};
+}; 
 
 log(`veil loaded in ${(performance.now() - initial).toFixed(1)}ms!`);
 

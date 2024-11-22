@@ -8,6 +8,7 @@ let dispatcherBackup: Dispatcher;
 
 type Dispatcher = {
   subscribe: (event: DispatcherEvent | `${DispatcherEvent}` | (string & {}), callback: (data: unknown) => void) => void;
+  unsubscribe: (event: DispatcherEvent | `${DispatcherEvent}` | (string & {}), callback: (data: unknown) => void) => void;
   dispatch: (action: { type: DispatcherEvent | `${DispatcherEvent}` | (string & {}) } & Record<string, unknown>) => void;
   waitForDispatch: (event: DispatcherEvent | `${DispatcherEvent}` | (string & {})) => Promise<unknown>;
 }
