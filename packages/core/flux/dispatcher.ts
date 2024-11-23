@@ -31,7 +31,7 @@ export const getDispatcher: () => Dispatcher = () => {
 
   const dispatcherProxy = new Proxy(foundDispatcher, {
     get(target, prop, receiver) {
-      if (prop === "dispatch" && store.$logFluxDispatches.get()) {
+      if (prop === "dispatch" && store.$logFluxDispatches.store.get()) {
         return (action: { type: DispatcherEvent | `${DispatcherEvent}` | (string & {}) } & Record<string, unknown>) => {
           log(action);
           return Reflect.get(target, prop, receiver).call(target, action);

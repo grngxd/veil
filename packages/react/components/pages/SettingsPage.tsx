@@ -22,44 +22,52 @@ const SettingsPage = () => {
             <div class={css(
                 {
                     display: "flex",
-                    gap: "0.5rem",
+                    gap: "0.75rem",
                     flexDirection: "column",
                 }
             )}>
-                {Object.entries(stores).map(([key, nanostore]) => (
+                {Object.entries(stores).map(([key, { friendlyName, description, store }]) => (
                     <div key={key} class={css({
                         display: "flex",
                         justifyContent: "space-between",
                         alignItems: "center",
                         width: "100%",
                     })}>
-                        <Text type="h2">{
-                            key
-                            .replace("$", "")
-                            .replace(/([A-Z])/g, " $1")
-                            .replace(/^./, str => str.toUpperCase())
-                            .trim()
-                        }</Text>
+                        <div
+                        class={css({
+                            display: "flex",
+                            flexDirection: "column",
+                        })}
+                        >
+                            <Text type="h2">
+                                {friendlyName}
+                            </Text>
+                            <Text className={css({
+                                color: "var(--text-muted)",
+                            })}>
+                                {description}
+                            </Text>
+                        </div>
   
-                        {nanostore.get() === true || nanostore.get() === false ? (
+                        {store.get() === true || store.get() === false ? (
                             // <input
                             //     type="checkbox"
-                            //     checked={nanostore.get()}
-                            //     onChange={(e) => nanostore.set(Boolean(e.currentTarget.checked))}
+                            //     checked={store.get()}
+                            //     onChange={(e) => store.set(Boolean(e.currentTarget.checked))}
                             // />
                             <Toggle
-                                checked={nanostore.get()}
-                                onChange={(value) => nanostore.set(value)}
+                                checked={store.get()}
+                                onChange={(value) => store.set(value)}
                             /> 
                         ) : (
                             // <input
                             //     type="text"
-                            //     value={String(nanostore.get())}
-                            //     onChange={(e) => nanostore.set(e.currentTarget.value)}
+                            //     value={String(store.get())}
+                            //     onChange={(e) => store.set(e.currentTarget.value)}
                             // />
                             <TextBox
-                                value={String(nanostore.get())}
-                                onChange={(value) => nanostore.set(value)}
+                                value={String(store.get())}
+                                onChange={(value) => store.set(value)}
                             /> 
                         )}
                     </div>
