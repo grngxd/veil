@@ -32,7 +32,7 @@ const SettingsPage = () => {
                             .replace(/^./, str => str.toUpperCase())
                             .trim()
                         }</h2>
-
+  
                         {nanostore.get() === true || nanostore.get() === false ? (
                             <input
                                 type="checkbox"
