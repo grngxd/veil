@@ -36,36 +36,36 @@ const getStyling = (type: TextType) => {
         case "h2":
             styling = css({
                 fontSize: "1.125rem",      // 18px
-                lineHeight: "1.5rem",
-                fontWeight: 600,
+                lineHeight: "1.4rem",
+                fontWeight: 500,
             });
             break;
         case "h3":
             styling = css({
                 fontSize: "1rem",
-                lineHeight: "1.5rem",
-                fontWeight: 600,
+                lineHeight: "1.35rem",
+                fontWeight: 500,
             });
             break;
         case "h4":
             styling = css({
                 fontSize: "0.875rem",
                 lineHeight: "1.25rem",
-                fontWeight: 600,
+                fontWeight: 500,
             });
             break;
         case "h5":
             styling = css({
                 fontSize: "0.75rem",
                 lineHeight: "1rem",
-                fontWeight: 600,
+                fontWeight: 500,
             });
             break;
         case "h6":
             styling = css({
                 fontSize: "0.75rem",
                 lineHeight: "1rem",
-                fontWeight: 600,
+                fontWeight: 500,
             });
             break;
         case "p":

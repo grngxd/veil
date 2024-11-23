@@ -25,7 +25,7 @@ const SettingsPage = () => {
                     gap: "0.75rem",
                     flexDirection: "column",
                 }
-            )}>
+            )}> 
                 {Object.entries(stores).map(([key, { friendlyName, description, store }]) => (
                     <div key={key} class={css({
                         display: "flex",
@@ -93,7 +93,7 @@ const SettingsPage = () => {
                         });
                     }}
                     colour={"red"}
-                >
+                >  
                     remove
                 </Button>
             </div>
