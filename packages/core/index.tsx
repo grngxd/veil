@@ -6,11 +6,10 @@ import * as electron from "./electron";
 import * as flux from "./flux";
 import * as settings from "./settings";
 
-if (window?.veil?.unload) {
-    // unload any previous instance(s) of veil that may still be running
-    window.veil.unload();
+while (window.veil?.unload) {
+    window.veil?.unload();
 }
-
+ 
 const initial = performance.now();
 
 // IMPORTANT!!!: this MUST be called at least once

@@ -4,6 +4,8 @@ import stores from "+store";
 import { css } from "@emotion/css";
 import { h } from "preact";
 import Button from "../Button";
+import TextBox from "../TextBox";
+import Toggle from "../Toggle";
 const SettingsPage = () => {
     return (
         <div class={css(
@@ -37,17 +39,25 @@ const SettingsPage = () => {
                         }</h2>
   
                         {nanostore.get() === true || nanostore.get() === false ? (
-                            <input
-                                type="checkbox"
+                            // <input
+                            //     type="checkbox"
+                            //     checked={nanostore.get()}
+                            //     onChange={(e) => nanostore.set(Boolean(e.currentTarget.checked))}
+                            // />
+                            <Toggle
                                 checked={nanostore.get()}
-                                onChange={(e) => nanostore.set(Boolean(e.currentTarget.checked))}
-                            />
+                                onChange={(value) => nanostore.set(value)}
+                            /> 
                         ) : (
-                            <input
-                                type="text"
+                            // <input
+                            //     type="text"
+                            //     value={String(nanostore.get())}
+                            //     onChange={(e) => nanostore.set(e.currentTarget.value)}
+                            // />
+                            <TextBox
                                 value={String(nanostore.get())}
-                                onChange={(e) => nanostore.set(e.currentTarget.value)}
-                            />
+                                onChange={(value) => nanostore.set(value)}
+                            /> 
                         )}
                     </div>
                 ))}
@@ -63,6 +73,17 @@ const SettingsPage = () => {
                     }}
                 >
                     test
+                </Button>
+
+                <Button
+                    onClick={() => {
+                        settings.removeCustomElement({
+                            label: "skibidi",
+                        });
+                    }}
+                    colour={"red"}
+                >
+                    remove
                 </Button>
             </div>
         </div>

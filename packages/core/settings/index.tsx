@@ -4,6 +4,7 @@ import { renderPreactInReact } from "+react/bridge";
 import SettingsPage from "+react/components/pages/SettingsPage";
 import { sleep } from "+util";
 import type { VNode } from "preact";
+import { generate } from "short-uuid";
 import { getDispatcher } from "../flux/dispatcher";
 import { abuseWebpack } from "../webpack/webpack";
 r;
@@ -21,18 +22,33 @@ let originalGetPredicateSections: any;
 let customElements: CustomElement[] = [];
 
 export const addCustomElement = (element: CustomElement) => {
-    customElements.push(element);
+    customElements.push({
+        ...element,
+        section: element.section === "HEADER" ? element.section : `${element.section}-${generate()}`,
+    });
     rerenderSidebar();
 };
 
 export const removeCustomElement = (element: Partial<CustomElement>) => {
-    customElements = customElements.filter((e) => {
-        for (const key of Object.keys(element) as (keyof CustomElement)[]) {
-            if (element[key] !== e[key]) return true;
-        }
+    const index = customElements.findIndex((e) => {
+        for (const k in element) {
+            const key = k as keyof CustomElement; 
+            if (key === "section") {
+                if (e.section.startsWith(element.section as string)) {
+                    return true;
+                }
+            } else if (e[key] === element[key]) {
+                return true;
+            }
+        } 
         return false;
     });
-}
+
+    if (index !== -1) {
+        customElements.splice(index, 1);
+        rerenderSidebar();
+    }
+};
 
 export const init = () => {
     getDispatcher()
@@ -52,7 +68,7 @@ export const init = () => {
                             {
                                 apply: (target, thisArg, args) => {
                                     const result: any = [...target.apply(thisArg, args)];
-
+ 
                                     let dividerCount = 0;
                                     let insertIndex = result.length;
 
@@ -83,26 +99,26 @@ export const init = () => {
 
             addCustomElement({
                 section: "HEADER",
-                searchableTitles: ["veil!!!"],
-                label: "veil!!!",
-                ariaLabel: "veil!!!",
-            });
+                label: "skibidi veil",
+            }); 
 
             addCustomElement({
                 element: () => renderPreactInReact(SettingsPage),
-                section: "CUSTOM_SECTION",
-                searchableTitles: ["veil"],
+                section: "veil_settings",
+                searchableTitles: ["veil settings", "veil"],
                 label: "veil",
             }); 
+
+            rerenderSidebar();
         });
 };  
 
 function rerenderSidebar() {
     const sidebarParent = document.querySelector(`nav[class^="sidebar"]`);
-    getFiberOwner(sidebarParent as Element)?.forceUpdate();
+    getFiberOwner(sidebarParent as Element, true)?.forceUpdate(); 
 }
 
-export const unload = () => {
+export const unload = () => { 
     customElements = [];
     rerenderSidebar();
     if (originalGetPredicateSections) {
@@ -118,4 +134,5 @@ export const unload = () => {
 
 export default {
     addCustomElement,
+    removeCustomElement,
 };   

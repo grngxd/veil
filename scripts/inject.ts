@@ -23,7 +23,7 @@ export const inject = async () => {
             id: 1,
             method: "Runtime.evaluate",
             params: {
-                expression: `${code}`
+                expression: code
             }
         };
 

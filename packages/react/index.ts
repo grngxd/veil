@@ -59,9 +59,18 @@ try {
     findReact();
     findReactDOM();
 
-    if (!React || !ReactDOM) {
-        throw new Error("Failed to find React or ReactDOM");
+    if (!React && !ReactDOM) {
+        throw new Error("Failed to find React and ReactDOM");
+    } 
+
+    if (!React) {
+        throw new Error("Failed to find React");
     }
+
+    if (!ReactDOM) {
+        throw new Error("Failed to find ReactDOM");
+    }
+
 } catch (err) {
     log(["Error initializing React:", err]);
     throw err;

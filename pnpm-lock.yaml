@@ -39,6 +39,9 @@ importers:
       preact:
         specifier: ^10.24.3
         version: 10.24.3
+      short-uuid:
+        specifier: ^5.2.0
+        version: 5.2.0
     devDependencies:
       '@stencil/core':
         specifier: ^4.22.3
@@ -612,6 +615,9 @@ packages:
   '@types/scheduler@0.16.8':
     resolution: {integrity: sha512-WZLiwShhwLRmeV6zH+GkbOFT6Z6VklCItrDioxUnv+u4Ll+8vKeFySoFyK/0ctcRpOmwAicELfmys1sDc/Rw+A==}
 
+  any-base@1.1.0:
+    resolution: {integrity: sha512-uMgjozySS8adZZYePpaWs8cxB9/kdzmpX6SgJZ+wbz1K5eYk5QMYDVJaZKhxyIHUdnnJkfR7SVgStgH7LkGUyg==}
+
   asynckit@0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
 
@@ -989,6 +995,10 @@ packages:
     engines: {node: '>=14.0.0'}
     hasBin: true
 
+  short-uuid@5.2.0:
+    resolution: {integrity: sha512-296/Nzi4DmANh93iYBwT4NoYRJuHnKEzefrkSagQbTH/A6NTaB68hSPDjm5IlbI5dx9FXdmtqPcj6N5H+CPm6w==}
+    engines: {node: '>=14'}
+
   source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
     engines: {node: '>=0.10.0'}
@@ -1030,6 +1040,10 @@ packages:
 
   undici-types@6.19.8:
     resolution: {integrity: sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==}
+
+  uuid@9.0.1:
+    resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
+    hasBin: true
 
   varint@6.0.0:
     resolution: {integrity: sha512-cXEIW6cfr15lFv563k4GuVuW/fiwjknytD37jIOLSdSWuOI6WnO/oKwmP2FQTU2l01LP8/M5TSAJpzUaGe3uWg==}
@@ -1443,6 +1457,8 @@ snapshots:
 
   '@types/scheduler@0.16.8': {}
 
+  any-base@1.1.0: {}
+
   asynckit@0.4.0: {}
 
   axios@1.7.7:
@@ -1798,6 +1814,11 @@ snapshots:
     optionalDependencies:
       '@parcel/watcher': 2.5.0
 
+  short-uuid@5.2.0:
+    dependencies:
+      any-base: 1.1.0
+      uuid: 9.0.1
+
   source-map-js@1.2.1: {}
 
   source-map@0.5.7: {}
@@ -1831,6 +1852,8 @@ snapshots:
       fsevents: 2.3.3
 
   undici-types@6.19.8: {}
+
+  uuid@9.0.1: {}
 
   varint@6.0.0: {}
 

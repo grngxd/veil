@@ -10,7 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "preact": "^10.24.3"
+    "preact": "^10.24.3",
+    "short-uuid": "^5.2.0"
   },
   "devDependencies": {
     "@stencil/core": "^4.22.3",
