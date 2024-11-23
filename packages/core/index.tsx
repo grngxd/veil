@@ -36,7 +36,7 @@ window.veil = {
         // @ts-ignore
         window.veil = null;
         Promise.all([
-            flux.dispatcher.unload(),
+            flux.dispatcher.unload(), 
             settings.unload(), 
         ]).then(() => {
             warn("veil unloaded.");

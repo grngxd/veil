@@ -27,6 +27,7 @@ const PreactCounter = () => {
 
 	return (
 		<>
+			<h1> skibidi rizz</h1>
 			<Button
 				onClick={() => setCount((c) => c + 1)}
 			>
