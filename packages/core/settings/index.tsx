@@ -1,14 +1,12 @@
 import { getFiberOwner } from "+core/fiber";
-import * as r from "+react";
 import { renderPreactInReact } from "+react/bridge";
 import SettingsPage from "+react/components/pages/SettingsPage";
 import { sleep } from "+util";
+import * as veil from "+veil";
 import type { VNode } from "preact";
 import { generate } from "short-uuid";
 import { getDispatcher } from "../flux/dispatcher";
 import { abuseWebpack } from "../webpack/webpack";
-r;
-
 type CustomElement = {
     section: string;
     searchableTitles?: string[];
@@ -99,14 +97,14 @@ export const init = () => {
 
             addCustomElement({
                 section: "HEADER",
-                label: "skibidi veil",
+                label: `veil (${veil.version})`,
             }); 
 
             addCustomElement({
                 element: () => renderPreactInReact(SettingsPage),
                 section: "veil_settings",
                 searchableTitles: ["veil settings", "veil"],
-                label: "veil",
+                label: "Settings", 
             }); 
 
             rerenderSidebar();
