@@ -2,7 +2,8 @@
 a bad discord client mod inspired by [shelter]("https://shelter.uwu.network").
 
 ## features
-- shitty settings menu that does nothing (and you have to encourage it to open lmao)
+- settings menu with a few options
+- yea thats about it lmao
 
 ## installation
 <details>
