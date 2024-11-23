@@ -3,7 +3,9 @@ import { renderPreactInReact } from "+react/bridge";
 import stores from "+store";
 import { css } from "@emotion/css";
 import { h } from "preact";
+import { generate } from "short-uuid";
 import Button from "../Button";
+import Text from "../Text";
 import TextBox from "../TextBox";
 import Toggle from "../Toggle";
 const SettingsPage = () => {
@@ -15,7 +17,7 @@ const SettingsPage = () => {
                 gap: "1rem",
             }
         )}>
-            <h1>Settings</h1>
+            <Text type="h1">Settings</Text>
 
             <div class={css(
                 {
@@ -28,15 +30,16 @@ const SettingsPage = () => {
                     <div key={key} class={css({
                         display: "flex",
                         justifyContent: "space-between",
+                        alignItems: "center",
                         width: "100%",
                     })}>
-                        <h2>{
+                        <Text type="h2">{
                             key
                             .replace("$", "")
                             .replace(/([A-Z])/g, " $1")
                             .replace(/^./, str => str.toUpperCase())
                             .trim()
-                        }</h2>
+                        }</Text>
   
                         {nanostore.get() === true || nanostore.get() === false ? (
                             // <input
@@ -65,7 +68,7 @@ const SettingsPage = () => {
                 <Button
                     onClick={() => {
                         settings.addCustomElement({
-                            element: () => renderPreactInReact(() => <h1>ohio</h1>),
+                            element: () => renderPreactInReact(() => <Text type="h1">skibidi id: {generate()}</Text>),
                             section: "skibidi",
                             searchableTitles: ["skibidi"],
                             label: "skibidi",

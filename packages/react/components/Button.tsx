@@ -38,7 +38,7 @@ const Button = ({ onClick, children, colour = "blurple", style, className }: But
                         backgroundColor: "#9BA4B4",
                         cursor: "not-allowed",
                     },
-                })} ${className}`
+                })} ${className ?? ""}`
             }
 
             style={style}

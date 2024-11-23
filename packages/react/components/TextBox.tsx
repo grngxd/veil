@@ -41,7 +41,7 @@ const TextBox = ({ placeholder = "Placeholder...", value = '', onChange, onSubmi
         // width: '100%', 
         padding: '0.6rem 1rem',
         borderRadius: '4px',
-        backgroundColor: '#202225',
+        backgroundColor: 'var(--background-tertiary)',
         color: '#dcddde',
         border: 'none',
         outline: 'none',
@@ -49,13 +49,7 @@ const TextBox = ({ placeholder = "Placeholder...", value = '', onChange, onSubmi
         ":placeholder": {
           color: '#72767d',
         },
-        ':focus': {
-          backgroundColor: '#23272a',
-        },
-        ':hover': {
-          backgroundColor: '#26282c', 
-        },
-      })} ${className}`}
+      })} ${className}`} 
       style={style}
     />
   );

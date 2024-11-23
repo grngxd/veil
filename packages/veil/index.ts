@@ -1,8 +1,8 @@
 import { generate } from "short-uuid";
 
 const version = "1.0-A1";
-const id = generate();
+const context = generate();
 export {
-    id, version
+    context, version
 };
 

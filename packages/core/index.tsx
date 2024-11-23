@@ -41,14 +41,14 @@ window.veil = {
     //     localStorage: localStorage,
     //     sessionStorage: sessionStorage
     // },
-    unload: () => {
+    unload: () => { 
         // @ts-ignore
         window.veil = null;
-        Promise.all([
-            flux.dispatcher.unload(), 
+        Promise.all([ 
             settings.unload(), 
             electron.unloadStorage()
         ]).then(() => {
+            flux.dispatcher.unload();
             warn("veil unloaded.");
         });
     }

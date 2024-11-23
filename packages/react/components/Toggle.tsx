@@ -53,13 +53,13 @@ const switchStyle = css({
   position: 'relative',
   width: '40px',
   height: '20px',
-  backgroundColor: '#202225',
+  backgroundColor: 'var(--background-tertiary)',
   borderRadius: '10px',
   transition: 'background-color 0.175s',
 });
 
 const activeSwitchStyle = css({
-    backgroundColor: '#43b581',
+    backgroundColor: 'var(--green-400)',
   });
 
 const sliderStyle = css({

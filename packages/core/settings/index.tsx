@@ -54,7 +54,7 @@ export const init = () => {
         .then(async () => {
             if (!window?.veil) return;
             // this makes sure only 1 instance of veil is running
-            if (window?.veil.veil.id  !== veil.id) return;
+            if (window?.veil.veil.context  !== veil.context) return;
             await sleep(1000); 
             abuseWebpack((c) => {
                 for (const chunk of Object.values(c)) {
@@ -95,7 +95,7 @@ export const init = () => {
                         );
                     }
                 }
-            });
+            }); 
   
             addCustomElement({
                 section: "HEADER",
