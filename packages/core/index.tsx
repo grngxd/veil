@@ -1,6 +1,7 @@
 import components from "+react/components";
 import * as util from "+util";
 import { log, warn } from "+util";
+import * as preact from "preact";
 import * as store from "../store";
 import * as veil from "../veil";
 import * as electron from "./electron";
@@ -29,6 +30,7 @@ window.veil = {
     flux: flux,
     settings: settings,
     ui: {
+        preact,
         components
     },  
     // electron: {
