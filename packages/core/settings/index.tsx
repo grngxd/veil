@@ -1,3 +1,4 @@
+import { getFiberOwner } from "+core/fiber";
 import * as r from "+react";
 import { renderPreactInReact } from "+react/bridge";
 import SettingsPage from "+react/components/pages/SettingsPage";
@@ -15,12 +16,23 @@ type CustomElement = {
     element?: () => VNode;
 };
 
+let SettingsView: any;
 let originalGetPredicateSections: any;
 let customElements: CustomElement[] = [];
 
 export const addCustomElement = (element: CustomElement) => {
     customElements.push(element);
+    rerenderSidebar();
 };
+
+export const removeCustomElement = (element: Partial<CustomElement>) => {
+    customElements = customElements.filter((e) => {
+        for (const key of Object.keys(element) as (keyof CustomElement)[]) {
+            if (element[key] !== e[key]) return true;
+        }
+        return false;
+    });
+}
 
 export const init = () => {
     getDispatcher()
@@ -31,13 +43,15 @@ export const init = () => {
             abuseWebpack((c) => {
                 for (const chunk of Object.values(c)) {
                     if (chunk.exports?.ZP?.prototype?.getPredicateSections) {
+                        SettingsView = chunk.exports.ZP;
+
                         originalGetPredicateSections = chunk.exports.ZP.prototype.getPredicateSections;
 
                         chunk.exports.ZP.prototype.getPredicateSections = new Proxy(
                             chunk.exports.ZP.prototype.getPredicateSections,
                             {
                                 apply: (target, thisArg, args) => {
-                                    const result: any = target.apply(thisArg, args);
+                                    const result: any = [...target.apply(thisArg, args)];
 
                                     let dividerCount = 0;
                                     let insertIndex = result.length;
@@ -73,17 +87,24 @@ export const init = () => {
                 label: "veil!!!",
                 ariaLabel: "veil!!!",
             });
+
             addCustomElement({
                 element: () => renderPreactInReact(SettingsPage),
                 section: "CUSTOM_SECTION",
                 searchableTitles: ["veil"],
                 label: "veil",
-            });
+            }); 
         });
 };  
 
+function rerenderSidebar() {
+    const sidebarParent = document.querySelector(`nav[class^="sidebar"]`);
+    getFiberOwner(sidebarParent as Element)?.forceUpdate();
+}
+
 export const unload = () => {
     customElements = [];
+    rerenderSidebar();
     if (originalGetPredicateSections) {
         abuseWebpack((c) => {
             for (const chunk of Object.values(c)) {

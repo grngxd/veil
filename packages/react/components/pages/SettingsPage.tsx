@@ -1,6 +1,9 @@
+import settings from "+core/settings";
+import { renderPreactInReact } from "+react/bridge";
 import stores from "+store";
 import { css } from "@emotion/css";
 import { h } from "preact";
+import Button from "../Button";
 const SettingsPage = () => {
     return (
         <div class={css(
@@ -48,6 +51,19 @@ const SettingsPage = () => {
                         )}
                     </div>
                 ))}
+
+                <Button
+                    onClick={() => {
+                        settings.addCustomElement({
+                            element: () => renderPreactInReact(() => <h1>ohio</h1>),
+                            section: "skibidi",
+                            searchableTitles: ["skibidi"],
+                            label: "skibidi",
+                        });
+                    }}
+                >
+                    test
+                </Button>
             </div>
         </div>
     );

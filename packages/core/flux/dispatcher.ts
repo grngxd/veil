@@ -10,7 +10,7 @@ type Dispatcher = {
   unsubscribe: (event: DispatcherEvent | `${DispatcherEvent}` | (string & {}), callback: (data: unknown) => void) => void;
   dispatch: (action: { type: DispatcherEvent | `${DispatcherEvent}` | (string & {}) } & Record<string, unknown>) => void;
   waitForDispatch: (event: DispatcherEvent | `${DispatcherEvent}` | (string & {})) => Promise<unknown>;
-}
+} 
 
 export const getDispatcher: () => Dispatcher = () => {
   if (dispatcher) return dispatcher;
