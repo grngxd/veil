@@ -1,13 +1,15 @@
+let iframe: HTMLIFrameElement;
+
 const handleStorage = () => {
-    const iframe = document.createElement("iframe");
+    iframe = document.createElement("iframe");
     iframe.style.display = "none";
     document.documentElement.append(iframe);
 
     const { localStorage, sessionStorage } = iframe.contentWindow as Window;
 
-    setTimeout(() => {
-        iframe.remove();
-    }, 0);
+    // setTimeout(() => {
+    //     iframe.remove();
+    // }, 0);
     
     return [
         localStorage,
@@ -15,11 +17,14 @@ const handleStorage = () => {
     ];   
 }
 
+const unloadStorage = () => {
+    iframe.remove();
+}
+
 const [localStorage, sessionStorage] = handleStorage();
 
 export {
-    handleStorage,
-    localStorage,
-    sessionStorage
+    handleStorage, localStorage,
+    sessionStorage, unloadStorage
 };
 

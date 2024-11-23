@@ -21,7 +21,7 @@ store.load();
 
 flux.stores.init();
 
-settings.init();                                                            
+settings.init();                                                             
 
 window.veil = {
     util: util, 
@@ -38,6 +38,7 @@ window.veil = {
         Promise.all([
             flux.dispatcher.unload(), 
             settings.unload(), 
+            electron.unloadStorage()
         ]).then(() => {
             warn("veil unloaded.");
         });
