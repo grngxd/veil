@@ -73,7 +73,11 @@ importers:
 
   packages/util: {}
 
-  packages/veil: {}
+  packages/veil:
+    dependencies:
+      short-uuid:
+        specifier: ^5.2.0
+        version: 5.2.0
 
 packages:
 

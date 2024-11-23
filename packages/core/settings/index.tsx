@@ -53,6 +53,8 @@ export const init = () => {
         .waitForDispatch("USER_SETTINGS_MODAL_OPEN")
         .then(async () => {
             if (!window?.veil) return;
+            // this makes sure only 1 instance of veil is running
+            if (window?.veil.veil.id  !== veil.id) return;
             await sleep(1000); 
             abuseWebpack((c) => {
                 for (const chunk of Object.values(c)) {
@@ -94,7 +96,7 @@ export const init = () => {
                     }
                 }
             });
-
+  
             addCustomElement({
                 section: "HEADER",
                 label: `veil (${veil.version})`,
@@ -106,7 +108,7 @@ export const init = () => {
                 searchableTitles: ["veil settings", "veil"],
                 label: "Settings", 
             }); 
-
+            
             rerenderSidebar();
         });
 };  

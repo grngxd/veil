@@ -1,4 +1,5 @@
 import { css } from '@emotion/css';
+// biome-ignore lint/style/useImportType: <explanation>
 import { type ComponentChildren, h } from 'preact';
 import { type Colour, getColour } from './colour';
 
@@ -6,9 +7,11 @@ type ButtonProps = {
   onClick: () => void;
   children: ComponentChildren;
   colour?: Colour;
+  className?: string;
+  style?: string | h.JSX.CSSProperties
 };
 
-const Button = ({ onClick, children, colour = "blurple" }: ButtonProps) => {
+const Button = ({ onClick, children, colour = "blurple", style, className }: ButtonProps) => {
 
     const [text, button] = getColour(colour);
 
@@ -17,7 +20,7 @@ const Button = ({ onClick, children, colour = "blurple" }: ButtonProps) => {
             type={"button"}
             onClick={onClick}
             className={
-                css({
+                `${css({
                     padding: "0.5rem 1rem",
                     fontSize: "1rem",
                     color: text,
@@ -35,8 +38,10 @@ const Button = ({ onClick, children, colour = "blurple" }: ButtonProps) => {
                         backgroundColor: "#9BA4B4",
                         cursor: "not-allowed",
                     },
-                })
+                })} ${className}`
             }
+
+            style={style}
         >
             {children}
         </button>

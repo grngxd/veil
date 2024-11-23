@@ -1,15 +1,18 @@
 import { css } from '@emotion/css';
+// biome-ignore lint/style/useImportType: <explanation>
 import { h } from 'preact';
 import { useState } from 'preact/hooks';
 
 type TextBoxProps = {
+  className?: string;
+  style?: string | h.JSX.CSSProperties;
   placeholder?: string;
   value?: string;
   onChange?: (value: string) => void;
   onSubmit?: () => void;
 };
 
-const TextBox = ({ placeholder = "Placeholder...", value = '', onChange, onSubmit }: TextBoxProps) => {
+const TextBox = ({ placeholder = "Placeholder...", value = '', onChange, onSubmit, className, style }: TextBoxProps) => {
   const [inputValue, setInputValue] = useState(value);
 
   const handleChange = (e: Event) => {
@@ -28,12 +31,13 @@ const TextBox = ({ placeholder = "Placeholder...", value = '', onChange, onSubmi
 
   return (
     <input
+
       type="text"
       placeholder={placeholder}
       value={inputValue}
       onInput={handleChange}
       onKeyPress={handleKeyPress}
-      className={css({
+      className={`${css({
         // width: '100%', 
         padding: '0.6rem 1rem',
         borderRadius: '4px',
@@ -46,12 +50,13 @@ const TextBox = ({ placeholder = "Placeholder...", value = '', onChange, onSubmi
           color: '#72767d',
         },
         ':focus': {
-          backgroundColor: '#292b2f',
+          backgroundColor: '#23272a',
         },
         ':hover': {
-          backgroundColor: '#242529',
+          backgroundColor: '#26282c', 
         },
-      })}
+      })} ${className}`}
+      style={style}
     />
   );
 };

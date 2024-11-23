@@ -1,4 +1,5 @@
 import { css } from '@emotion/css';
+// biome-ignore lint/style/useImportType: <explanation>
 import { h } from 'preact';
 import { useState } from 'preact/hooks';
 
@@ -21,7 +22,7 @@ const Toggle = ({ label = '', checked = false, onChange }: ToggleProps) => {
 
   return (
     // biome-ignore lint/a11y/noLabelWithoutControl: <explanation>
-    <label className={toggleContainerStyle}>
+    <label className={`${toggleContainerStyle}`}>
       {label && <span className={labelStyle}>{label}</span>}
       {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
       <div
