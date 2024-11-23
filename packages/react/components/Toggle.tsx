@@ -54,7 +54,7 @@ const switchStyle = css({
   height: '20px',
   backgroundColor: '#202225',
   borderRadius: '10px',
-  transition: 'background-color 0.15s',
+  transition: 'background-color 0.175s',
 });
 
 const activeSwitchStyle = css({
@@ -65,11 +65,11 @@ const sliderStyle = css({
   position: 'absolute',
   top: '2px',
   left: '2px',
-  width: '16px',
+  width: '16px', 
   height: '16px',
   backgroundColor: '#ffffff',
   borderRadius: '50%',
-  transition: 'transform 0.15s, background-color 0.15s',
+  transition: 'transform 0.175s, background-color 0.175s',
   transform: 'translateX(0)',
 });
 

@@ -1,3 +1,4 @@
+import components from "+react/components";
 import * as util from "+util";
 import { log, warn } from "+util";
 import * as store from "../store";
@@ -27,6 +28,9 @@ window.veil = {
     veil: veil,
     flux: flux,
     settings: settings,
+    ui: {
+        components
+    },  
     // electron: {
     //     localStorage: localStorage,
     //     sessionStorage: sessionStorage
