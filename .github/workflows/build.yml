@@ -9,15 +9,28 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # Checkout the repository
       - uses: actions/checkout@v3
+
+      # Set up Node.js environment
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+
+      # Install pnpm globally
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      # Install dependencies using pnpm
       - name: Install Dependencies
-        run: npm install
+        run: pnpm install
+
+      # Build Veil using pnpm
       - name: Build Veil
-        run: npm run build:veil
+        run: pnpm run build:veil
+
+      # Upload the build artifact
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
