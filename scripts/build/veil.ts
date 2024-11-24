@@ -20,7 +20,11 @@ const watchMode = args.includes('--watch');
             setup(build) {
                 build.onEnd(result => {
                     console.log(`Rebuilding... ${result.errors.length} errors, ${result.warnings.length} warnings`);
-                    inject();
+                    if (watchMode) inject();
+                    else {
+                        console.log('Build complete.');
+                        process.exit(0);
+                    }
                 })
             },
         },
@@ -32,6 +36,5 @@ const watchMode = args.includes('--watch');
         console.log('Watching...');
     } else {
         await ctx.rebuild();
-        console.log('Build complete.');
     }
 })();
