@@ -1,4 +1,6 @@
+import axios from 'axios';
 import { exec, spawn } from 'node:child_process';
+import fs from 'node:fs';
 import { platform } from 'node:os';
 import path from 'node:path';
 import WebSocket from 'ws';
@@ -9,7 +11,6 @@ import * as core from '../core';
  */
 const EXECUTABLE = await core.findDiscordExe();
 const DEBUGGING_PORT = 4444;
-const WEB_PORT = 4443;
 
 if (!EXECUTABLE) {
     console.error('Discord executable not found.');
@@ -19,61 +20,112 @@ if (!EXECUTABLE) {
 // Extract process name for Windows
 const processName = platform() === 'win32' ? path.basename(EXECUTABLE) : EXECUTABLE;
 
-// Kill Discord process
-exec(
-    platform() === 'win32'
-        ? `taskkill /IM "${processName}" /F`
-        : `pkill -f "${processName}"`,
-    (error, stdout, stderr) => {
-        if (error) {
-            console.error(`Error killing process: ${error.message}`);
-            return;
-        }
-        if (stderr) {
-            console.error(`Error killing process: ${stderr}`);
-            return;
-        }
-        console.log(`Successfully killed ${processName}`);
+// Function to kill Discord process
+const killDiscord = () => {
+    return new Promise<void>((resolve, reject) => {
+        exec(
+            platform() === 'win32'
+                ? `taskkill /IM "${processName}" /F`
+                : `pkill -f "${processName}"`,
+            (error, stdout, stderr) => {
+                if (error) {
+                    console.error(`Error killing process: ${error.message}`);
+                    reject(error);
+                    return;
+                }
+                if (stderr) {
+                    console.error(`Error killing process: ${stderr}`);
+                    reject(new Error(stderr));
+                    return;
+                }
+                console.log(`Successfully killed ${processName}`);
+                resolve();
+            }
+        );
+    });
+};
+
+// Function to launch Discord with remote debugging
+const launchDiscord = () => {
+    const discordProcess = spawn(EXECUTABLE, [`--remote-debugging-port=${DEBUGGING_PORT}`], {
+        detached: true,
+        stdio: 'ignore',
+    });
+
+    // Detach the child process
+    discordProcess.unref();
+};
+
+// Function to inject code into Discord
+const injectCode = async () => {
+    const res = await axios.get(`http://127.0.0.1:${DEBUGGING_PORT}/json`);
+    const wsURL = res.data[0]?.webSocketDebuggerUrl;
+
+    if (!wsURL) {
+        await killDiscord();
+        launchDiscord();
+        return;
     }
-);
 
-// Start the proxy server
-await core.startProxy(WEB_PORT);
+    console.log('WebSocket Address:', wsURL);
 
-// Launch Discord with remote debugging
-const discordProcess = spawn(EXECUTABLE, [`--remote-debugging-port=${DEBUGGING_PORT}`], {
-    detached: true,
-    stdio: 'ignore',
-});
+    const ws: WebSocket = new WebSocket(wsURL);
+    const code = fs.readFileSync('./out/veil.js', 'utf-8');
 
-// Detach the child process
-discordProcess.unref();
+    const timeout = setTimeout(() => {
+        console.error('WebSocket connection timed out.');
+        ws.terminate();
+        process.exit(1);
+    }, 60000);
 
-// Fetch the Veil script
-const script = await core.getVeilScript();
+    ws.on('open', () => {
+        clearTimeout(timeout);
+        const payload = {
+            id: 1,
+            method: 'Runtime.evaluate',
+            params: {
+                expression: code,
+            },
+        };
 
-// Wait for Discord to initialize
-await new Promise(resolve => setTimeout(resolve, 5000));
+        ws.send(JSON.stringify(payload));
+    });
 
-// Connect to the WebSocket for injection
-const ws = new WebSocket(`ws://localhost:${DEBUGGING_PORT}/devtools/browser`);
+    ws.on('message', (data) => {
+        if (data.method === 'Runtime.exceptionThrown') {
+            console.error('An exception was thrown while evaluating the payload:', data.params.exceptionDetails);
+            process.exit(1);
+        }
 
-ws.on('open', () => {
-    ws.send(JSON.stringify({
-        id: 1,
-        method: 'Runtime.evaluate',
-        params: {
-            expression: script,
-            awaitPromise: true,
-        },
-    }));
-    console.log('Veil script injected.');
-});
+        if (data.method === 'Inspector.detached') {
+            console.error('The inspector was detached while evaluating the payload.');
+            process.exit(1);
+        }
 
-ws.on('error', (error) => {
-    console.error('WebSocket error:', error);
-});
+        process.exit(0);
+    });
 
-ws.on('close', () => {
-    console.log('WebSocket connection closed.');
-});
+    ws.on('error', (error) => {
+        clearTimeout(timeout);
+        console.error('WebSocket error:', error);
+        process.exit(1);
+    });
+
+    ws.on('close', () => {
+        clearTimeout(timeout);
+        console.log('WebSocket connection closed.');
+    });
+};
+
+// Initial launch of Discord
+launchDiscord();
+
+// Check and inject code at intervals
+const i = setInterval(async () => {
+    try {
+        await injectCode();
+        clearInterval(i);
+    } catch (error) {
+        console.error('Error during injection:', error);
+    }
+}, 5000);

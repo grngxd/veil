@@ -1,4 +1,5 @@
 // index.ts
+import axios from "axios";
 import { promises } from "node:fs";
 import { platform } from "node:os";
 import { join } from "node:path";
@@ -53,8 +54,9 @@ const startProxy = async (port: number) => {
 // get veil.js from the github grngxd/veil's last release
 const veilUrl = "https://github.com/grngxd/veil/releases/latest/download/veil.js";
 const getVeilScript = async () => {
-    const response = await fetch(veilUrl);
-    return response.text();
+    const response = await axios.get(veilUrl);
+    const text = response.data;
+    return text;
 };
 
 export { findDiscordExe, getVeilScript, startProxy };

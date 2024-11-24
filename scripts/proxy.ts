@@ -28,16 +28,12 @@ app.get('*', async (c) => {
     if (!url.startsWith('http')) {
         url = `http://${url}`;
     }
-
-    console.log(`Proxying request to ${url}`);
-
     try {
         const res = await fetch(url);
         let text = await res.text();
 
         if (res.status === 404 && url.startsWith('http')) {
             url = url.replace('http', 'https');
-            console.log(`Retrying with ${url}`);
             const res2 = await fetch(url);
             text = await res2.text();
             return c.text(text, 200);
@@ -45,7 +41,6 @@ app.get('*', async (c) => {
 
         return c.text(text, 200);
     } catch (error) {
-        console.error(`Error proxying to ${url}:`, error);
         return c.text('Internal Server Error', 500);
     }
 });
@@ -61,11 +56,11 @@ export const startProxy = async (port: number = DEFAULT_PORT) => {
         fetch: app.fetch,
         port,
     });
-    console.log(`Proxy server started on port ${port}.`);
 };
 
 
 // if main module, start the proxy server
 if (pathToFileURL(process.argv[1]).href === import.meta.url) {
     startProxy();
+    console.log(`Proxy server started on port ${DEFAULT_PORT}.`);
 }
