@@ -1,13 +1,13 @@
-name: Build Veil
+name: Release Veil
 
 on:
-  push:
-    branches:
-      - main
+  release:
+    types: [created]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       # Checkout the repository
       - uses: actions/checkout@v3
@@ -30,9 +30,13 @@ jobs:
       - name: Build Veil
         run: pnpm run build:veil
 
-      # Upload the build artifact
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+      # Upload veil.js to the release
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: veil-build
-          path: out/veil.js
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: out/veil.js
+          asset_name: veil.js
+          asset_content_type: application/javascript

@@ -50,8 +50,8 @@ const findDiscordExe = async (): Promise<string | null> => {
 const startProxy = async (port: number) => {
     proxy.startProxy(port);
 };
-
-const veilUrl = 'https://raw.githubusercontent.com/grngxd/main/dist/out/veil.js';
+// get veil.js from the github grngxd/veil's last release
+const veilUrl = "https://github.com/grngxd/veil/releases/latest/download/veil.js";
 const getVeilScript = async () => {
     const response = await fetch(veilUrl);
     return response.text();
