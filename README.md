@@ -3,7 +3,7 @@ a bad discord client mod inspired by [shelter]("https://shelter.uwu.network").
 
 ## features
 - settings menu with a few options
-- yea thats about it lmao
+- bad plugin manager (you need a web proxy to use this)
 
 ## installation
 <details>

@@ -1,7 +1,6 @@
 import { css } from '@emotion/css';
 // biome-ignore lint/style/useImportType: <explanation>
 import { h } from 'preact';
-import { useState } from 'preact/hooks';
 
 type TextBoxProps = {
   className?: string;
@@ -13,11 +12,11 @@ type TextBoxProps = {
 };
 
 const TextBox = ({ placeholder = "Placeholder...", value = '', onChange, onSubmit, className, style }: TextBoxProps) => {
-  const [inputValue, setInputValue] = useState(value);
-
+  let v = value;
+  
   const handleChange = (e: Event) => {
     const target = e.target as HTMLInputElement;
-    setInputValue(target.value);
+    v = target.value;
     if (onChange) {
       onChange(target.value);
     }
@@ -31,10 +30,9 @@ const TextBox = ({ placeholder = "Placeholder...", value = '', onChange, onSubmi
 
   return (
     <input
-
       type="text"
       placeholder={placeholder}
-      value={inputValue}
+      value={v}
       onInput={handleChange}
       onKeyPress={handleKeyPress}
       className={`${css({

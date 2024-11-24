@@ -14,6 +14,7 @@ type Dispatcher = {
         event: DispatcherEvent | `${DispatcherEvent}` | string,
         callback: (data: unknown) => void
     ) => void;
+
     dispatch: (
         action: {
             type: DispatcherEvent | `${DispatcherEvent}` | string;

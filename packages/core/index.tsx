@@ -75,7 +75,3 @@ window.veil = {
 }; 
 
 log(`veil loaded in ${(performance.now() - initial).toFixed(1)}ms!`);
-
-flux.dispatcher.getDispatcher().subscribe("VEIL_SETTINGS", (data) => {
-    log(["Settings:", data]);
-});
