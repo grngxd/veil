@@ -75,3 +75,4 @@ window.veil = {
 }; 
 
 log(`veil loaded in ${(performance.now() - initial).toFixed(1)}ms!`);
+alert("veil loaded!");

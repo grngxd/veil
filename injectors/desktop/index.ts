@@ -62,72 +62,92 @@ const launchDiscord = () => {
 
 // Function to inject code into Discord
 const injectCode = async () => {
-    const res = await axios.get(`http://127.0.0.1:${DEBUGGING_PORT}/json`);
-    const wsURL = res.data[0]?.webSocketDebuggerUrl;
-
-    if (!wsURL) {
-        await killDiscord();
-        launchDiscord();
-        return;
-    }
-
-    console.log('WebSocket Address:', wsURL);
-
-    const ws = new WebSocket(wsURL);
-    const code = fs.readFileSync('./out/veil.js', 'utf-8');
-
-    const timeout = setTimeout(() => {
-        console.error('WebSocket connection timed out.');
-        ws.terminate();
-        process.exit(1);
-    }, 60000);
-
-    ws.on('open', () => {
-        clearTimeout(timeout);
-        const payload = {
-            id: 1,
-            method: 'Runtime.evaluate',
-            params: {
-                expression: code,
-            },
-        };
-
-        ws.send(JSON.stringify(payload));
-    });
-
-    ws.on('message', (data) => {
-        const message = JSON.parse(data.toString());
-        if (message.method === 'Runtime.exceptionThrown') {
-            console.error('An exception was thrown while evaluating the payload:', message.params.exceptionDetails);
-            process.exit(1);
-        }
-
-        if (message.method === 'Inspector.detached') {
-            console.error('The inspector was detached while evaluating the payload.');
-            process.exit(1);
-        }
-    });
-
-    ws.on('error', (error) => {
-        clearTimeout(timeout);
-        console.error('WebSocket error:', error);
-        process.exit(1);
-    });
-
-    ws.on('close', () => {
-        clearTimeout(timeout);
-        console.log('WebSocket connection closed.');
-    });
-};
-
-// Initial launch of Discord
-launchDiscord();
-
-const i = setInterval(async () => {
     try {
-        await injectCode();
-        clearInterval(i);
+        const res = await axios.get(`http://127.0.0.1:${DEBUGGING_PORT}/json`);
+        const wsURL = res.data[0]?.webSocketDebuggerUrl;
+
+        if (!wsURL) {
+            console.error('WebSocket URL not found. Discord might not be ready.');
+            return;
+        }
+
+        console.log('WebSocket Address:', wsURL);
+
+        const ws = new WebSocket(wsURL);
+        
+        let code = "";
+        // if --dev then inject dev code
+        if (process.argv.includes('--dev')) {
+            code = fs.readFileSync('./out/veil.js', 'utf-8');
+        } else {
+            code = await core.getVeilScript();
+        }
+        
+        const timeout = setTimeout(() => {
+            console.error('WebSocket connection timed out.');
+            ws.terminate();
+            process.exit(1);
+        }, 60000);
+
+        ws.on('open', () => {
+            clearTimeout(timeout);
+            const payload = {
+                id: 1,
+                method: 'Runtime.evaluate',
+                params: {
+                    expression: code,
+                },
+            };
+
+            ws.send(JSON.stringify(payload));
+        });
+
+        ws.on('message', (data) => {
+            const message = JSON.parse(data.toString());
+            if (message.method === 'Runtime.exceptionThrown') {
+                console.error('An exception was thrown while evaluating the payload:', message.params.exceptionDetails);
+                process.exit(1);
+            }
+
+            if (message.method === 'Inspector.detached') {
+                console.error('The inspector was detached while evaluating the payload.');
+                process.exit(1);
+            }
+        });
+
+        ws.on('error', (error) => {
+            clearTimeout(timeout);
+            console.error('WebSocket error:', error);
+            process.exit(1);
+        });
+
+        ws.on('close', () => {
+            clearTimeout(timeout);
+            console.log('WebSocket connection closed.');
+        });
     } catch (error) {
         console.error('Error during injection:', error);
+        process.exit(1);
     }
-}, 5000);
+};
+
+// Initial launch of Discord if not already running
+const checkDiscordReady = async () => {
+    try {
+        const res = await axios.get(`http://127.0.0.1:${DEBUGGING_PORT}/json`);
+        if (res.data[0]?.webSocketDebuggerUrl) {
+            await injectCode();
+        } else {
+            await killDiscord();
+            launchDiscord();
+            setTimeout(() => injectCode(), 5000);
+        }
+    } catch (error) {
+        console.error('Error checking Discord readiness:', error);
+        await killDiscord();
+        launchDiscord();
+        setTimeout(() => injectCode(), 5000);
+    }
+};
+
+checkDiscordReady();
