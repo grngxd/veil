@@ -5,7 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "watch:veil": "tsx watch scripts/build/veil.ts",
+    "watch:veil": "tsx watch scripts/build/veil.ts --watch",
     "build:veil": "tsx build scripts/build/veil.ts",
     "proxy": "tsx watch scripts/proxy.ts",
     "watch": "concurrently --raw \"npm run proxy\" \"npm run watch:veil\""
