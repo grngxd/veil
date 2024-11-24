@@ -5,9 +5,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "watch-np": "tsx watch scripts/watch.ts",
+    "watch:veil": "tsx watch scripts/build/veil.ts",
+    "build:veil": "tsx build scripts/build/veil.ts",
     "proxy": "tsx watch scripts/proxy.ts",
-    "start": "concurrently \"npm run proxy\" \"npm run watch-np\""
+    "watch": "concurrently --raw \"npm run proxy\" \"npm run watch:veil\""
   },
   "keywords": [],
   "author": "",

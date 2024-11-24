@@ -1,6 +1,9 @@
 import { context } from 'esbuild';
 import { sassPlugin } from 'esbuild-sass-plugin';
-import { inject } from './inject';
+import { inject } from '../inject';
+
+const args = process.argv.slice(2);
+const watchMode = args.includes('--watch');
 
 (async () => {
     const ctx = await context({
@@ -22,8 +25,13 @@ import { inject } from './inject';
             },
         },
         sassPlugin()],
-    })
+    });
 
-    await ctx.watch()
-    console.log('Watching...');
+    if (watchMode) {
+        await ctx.watch();
+        console.log('Watching...');
+    } else {
+        await ctx.rebuild();
+        console.log('Build complete.');
+    }
 })();

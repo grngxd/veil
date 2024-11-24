@@ -6,10 +6,6 @@ const handleStorage = () => {
     document.documentElement.append(iframe);
 
     const { localStorage, sessionStorage } = iframe.contentWindow as Window;
-
-    // setTimeout(() => {
-    //     iframe.remove();
-    // }, 0);
     
     return [
         localStorage,

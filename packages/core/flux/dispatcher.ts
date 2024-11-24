@@ -1,4 +1,4 @@
-import { log } from "+util";
+import { log, warn } from "+util";
 import store from "../../store";
 import { abuseWebpack } from "../webpack/webpack";
 
@@ -79,6 +79,8 @@ export const unload = () => {
     });
 
     dispatcher = dispatcherBackup;
+  } else {
+	warn("Dispatcher not found, couldn't restore");
   }
 };
 

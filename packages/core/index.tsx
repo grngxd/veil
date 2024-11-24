@@ -43,8 +43,8 @@ window.veil = {
     flux: flux,
     settings: settings,
     plugins: {
-        loadPlugin: plugins.loadPlugin,
-        loaded: plugins.loadedPlugins,
+        add: plugins.add,
+        plugins: plugins.plugins,
     },
     ui: {
         preact,
@@ -59,11 +59,14 @@ window.veil = {
     unload: () => { 
         // @ts-ignore
         window.veil = null;
+
+        plugins.unload(); 
+
         Promise.all([ 
+            flux.dispatcher.unload(),
             settings.unload(), 
             electron.unloadStorage()
         ]).then(() => {
-            flux.dispatcher.unload();
             warn("veil unloaded.");
         });
     }

@@ -1,3 +1,15 @@
+// this script is just for development: it creates a proxy server that proxies requests to other servers
+
+// if you wanna use your own proxy server, you can use this script,
+// or make your own that fufills url: [server]/* -> http(s):/*,
+// so for example https://localhost:4443/https://google.com will proxy to https://google.com
+// and https://localhost:4443/http://google.com will proxy to http://google.com
+// and https://localhost:4443/google.com will proxy to http://google.com, and try https://google.com if that fails
+
+// i chose hono because its cheap and easy to use,
+// this whole thing couldve fit in 1 line if you tried really hard
+// but i wanted to add some headers to make it work with the web client
+
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
 

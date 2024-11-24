@@ -95,7 +95,7 @@ export const init = () => {
                         );
                     }
                 }
-            }); 
+            });  
   
             addCustomElement({
                 section: "HEADER",

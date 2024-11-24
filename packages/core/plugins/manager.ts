@@ -1,55 +1,74 @@
 import { localStorage } from "+core/electron";
 import * as util from "+util";
-import { error, warn } from "+util";
+import { error } from "+util";
+import { atom, computed } from "nanostores";
+
+type Plugin = {
+    init: () => void;
+    unload: () => void;
+    metadata?: PluginMetadata;
+};
 
 type PluginMetadata = {
     link: string;
     enabled: boolean;
 };
 
-type Plugin = {
-    init: () => void;
-    unload: () => void;
-};
+export const plugins = atom<Map<string, Plugin>>(new Map());
+export const enabledPlugins = computed(plugins, (p) =>
+    Array.from(p.values()).filter((plugin) => plugin.metadata?.enabled)
+);
 
-const pluginManager: PluginMetadata[] = [];
-export const loadedPlugins: Map<string, Plugin> = new Map();
-const enabledPlugins: Map<string, Plugin> = new Proxy(new Map(), {
-    get() {
-        const plugins = new Map();
-        for (const [link, plugin] of loadedPlugins) {
-            if (pluginManager.find(p => p.link === link)?.enabled) {
-                plugins.set(link, plugin);
-            }
-        }
-        return plugins;
-    }
-});
+let cb;
 
 export const init = async () => {
-    const raw = localStorage.getItem("VEIL_PLUGINS") || "[]";
-    const plugins = JSON.parse(raw) as PluginMetadata[];
-    pluginManager.push(...plugins);
+    const raw = localStorage.getItem("VEIL_PLUGINS") || "{}";
+    const storedPlugins = JSON.parse(raw) as Record<string, PluginMetadata>;
 
-    for (const plugin of pluginManager) {
-        if (plugin.enabled) {
-            try {
-                const pluginModule = await loadPlugin(plugin.link);
-                if (pluginModule) {
-                    pluginModule.init();
-                    loadedPlugins.set(plugin.link, pluginModule);
-                } else {
-                    warn(`Plugin at ${plugin.link} does not export init and unload functions.`);
+    await Promise.all(
+        Object.entries(storedPlugins).map(async ([url, metadata]) => {
+            const plugin = await add(url, false);
+            if (plugin) {
+                if (metadata.enabled) {
+                    plugin.init();
                 }
-            } catch (e) {
-                error([`Failed to load plugin at ${plugin.link}:`, e]);
+
+                const updatedPlugins = new Map(plugins.get());
+                updatedPlugins.set(url, {
+                    ...plugin,
+                    metadata
+                });
+                plugins.set(updatedPlugins);
             }
-        }
-    }
+        })
+    );
+
+    cb = plugins.subscribe((p) => {
+        const metadata = Object.fromEntries(
+            Array.from(p.entries()).map(([url, plugin]) => [
+                url,
+                plugin.metadata
+            ])
+        );
+    
+        localStorage.setItem("VEIL_PLUGINS", JSON.stringify(metadata));
+    });  
 };
 
+export const unload = () => {
+    cb();
+    
+    // biome-ignore lint/complexity/noForEach: <explanation>
+        enabledPlugins.get().forEach((plugin) => {
+        try {
+            plugin.unload();
+        } catch (e) {
+            error(['Error unloading plugin:', e]);
+        }
+    });
+}; 
 
-export const loadPlugin = async (url: string): Promise<Plugin | null> => {
+export const add = async (url: string, alsoInit = true): Promise<Plugin | null> => {
     const trimmed = url.trim();
     try {
         const res = await util.fetch(trimmed);
@@ -58,7 +77,7 @@ export const loadPlugin = async (url: string): Promise<Plugin | null> => {
         const blob = new Blob([code], { type: 'application/javascript' });
         const blobURL = URL.createObjectURL(blob);
 
-        const module = await import(/* @vite-ignore */ blobURL);
+        const module = await import(blobURL) as Plugin;
 
         URL.revokeObjectURL(blobURL);
 
@@ -66,26 +85,26 @@ export const loadPlugin = async (url: string): Promise<Plugin | null> => {
             return null;
         }
 
-        module.init();
+        const updatedPlugins = new Map(plugins.get());
+        updatedPlugins.set(url, {
+            init: module.init,
+            unload: module.unload,
+            metadata: {
+                link: url,
+                enabled: true
+            }
+        });
 
-        loadedPlugins.set(trimmed, module);
+        plugins.set(updatedPlugins);
+
+        if (alsoInit) module.init()
 
         return {
             init: module.init,
             unload: module.unload
-        };
+        } as Plugin;
     } catch (e) {
-        console.error('Error loading plugin module:', e);
+        error(['Error loading plugin module:', e]);
         return null;
     }
 };
-
-// Example Plugin
-
-// export const init = () => {
-//     console.log("Example Plugin Initialized");
-// };
-
-// export const unload = () => {
-//     console.log("Example Plugin Unloaded");
-// };
