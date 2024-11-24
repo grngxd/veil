@@ -5,7 +5,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "watch": "tsx scripts/watch.ts"
+    "watch-np": "tsx watch scripts/watch.ts",
+    "proxy": "tsx watch scripts/proxy.ts",
+    "start": "concurrently \"npm run proxy\" \"npm run watch-np\""
   },
   "keywords": [],
   "author": "",
@@ -14,12 +16,15 @@
     "@biomejs/biome": "1.9.4",
     "@types/node": "^22.8.6",
     "axios": "^1.7.7",
+    "concurrently": "^9.1.0",
     "dotenv": "^16.4.5",
     "esbuild": "^0.24.0",
     "tsx": "^4.19.2",
     "ws": "^8.18.0"
   },
   "dependencies": {
-    "esbuild-sass-plugin": "^3.3.1"
+    "@hono/node-server": "^1.13.7",
+    "esbuild-sass-plugin": "^3.3.1",
+    "hono": "^4.6.11"
   }
 }

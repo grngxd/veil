@@ -7,12 +7,21 @@ import * as store from "../store";
 import * as veil from "../veil";
 import * as electron from "./electron";
 import * as flux from "./flux";
+import * as plugins from "./plugins";
 import * as settings from "./settings";
+
 while (window.veil?.unload) {
     window.veil?.unload();
 }
  
 const initial = performance.now();
+
+// render without reactivity <meta http-equiv="Content-Security-Policy" content="connect-src 'self'" />
+const meta = document.createElement("meta");
+meta.httpEquiv = "Content-Security-Policy";
+// allow all connections
+meta.content = "connect-src *";
+document.head.appendChild(meta); 
 
 // IMPORTANT!!!: this MUST be called at least once
 flux.dispatcher.getDispatcher();
@@ -24,13 +33,19 @@ flux.stores.init();
 
 react.init();
 
-settings.init();                                                             
+settings.init();      
+
+plugins.init();
 
 window.veil = {
     util: util, 
     veil: veil,
     flux: flux,
     settings: settings,
+    plugins: {
+        loadPlugin: plugins.loadPlugin,
+        loaded: plugins.loadedPlugins,
+    },
     ui: {
         preact,
         react: react.React,

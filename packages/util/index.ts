@@ -1,3 +1,5 @@
+import * as veil from "+veil";
+
 function log(text: any): void;
 function log(text: any, func: "log" | "warn" | "error"): void;
 function log(text: any | any[], func: "log" | "warn" | "error" = "log") {
@@ -52,6 +54,9 @@ function sleep(ms: number): Promise<void> {
 }
 
 export {
-    error, log, sleep, warn
+    error, fetch, log, sleep, warn
 };
 
+async function fetch(url: string, init?: RequestInit): Promise<Response> {
+    return await window.fetch(`http://127.0.0.1:${veil.proxyPort}/${url}`, init);
+}
