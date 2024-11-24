@@ -11,11 +11,15 @@ import * as core from '../core';
  */
 const EXECUTABLE = await core.findDiscordExe();
 const DEBUGGING_PORT = 4444;
+const WEB_SERVER_PORT = 4443;
 
 if (!EXECUTABLE) {
     console.error('Discord executable not found.');
     process.exit(1);
 }
+
+// Function to start the web server in a detached process
+core.startProxy(WEB_SERVER_PORT);
 
 // Extract process name for Windows
 const processName = platform() === 'win32' ? path.basename(EXECUTABLE) : EXECUTABLE;
@@ -69,7 +73,7 @@ const injectCode = async () => {
 
     console.log('WebSocket Address:', wsURL);
 
-    const ws: WebSocket = new WebSocket(wsURL);
+    const ws = new WebSocket(wsURL);
     const code = fs.readFileSync('./out/veil.js', 'utf-8');
 
     const timeout = setTimeout(() => {
@@ -92,17 +96,16 @@ const injectCode = async () => {
     });
 
     ws.on('message', (data) => {
-        if (data.method === 'Runtime.exceptionThrown') {
-            console.error('An exception was thrown while evaluating the payload:', data.params.exceptionDetails);
+        const message = JSON.parse(data.toString());
+        if (message.method === 'Runtime.exceptionThrown') {
+            console.error('An exception was thrown while evaluating the payload:', message.params.exceptionDetails);
             process.exit(1);
         }
 
-        if (data.method === 'Inspector.detached') {
+        if (message.method === 'Inspector.detached') {
             console.error('The inspector was detached while evaluating the payload.');
             process.exit(1);
         }
-
-        process.exit(0);
     });
 
     ws.on('error', (error) => {
@@ -120,7 +123,6 @@ const injectCode = async () => {
 // Initial launch of Discord
 launchDiscord();
 
-// Check and inject code at intervals
 const i = setInterval(async () => {
     try {
         await injectCode();
