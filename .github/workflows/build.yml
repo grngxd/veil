@@ -27,23 +27,24 @@ jobs:
       - name: Build Veil
         run: pnpm run build:veil
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
+      - name: Check if Release Exists
+        id: check_release
+        run: |
+          curl -s \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ github.ref_name }} \
+            | jq -r '.id'
 
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
+      - name: Create or Update Release
+        id: create_update_release
+        run: |
+          if [ "${{ steps.check_release.outputs.id }}" != "null" ]; then
+            echo "Release exists, updating..."
+            gh release upload ${{ github.ref_name }} out/veil.js --clobber
+          else
+            echo "Release does not exist, creating..."
+            gh release create ${{ github.ref_name }} out/veil.js -t "Release ${{ github.ref_name }}"
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: out/veil.js
-          asset_name: veil.js
-          asset_content_type: application/javascript
