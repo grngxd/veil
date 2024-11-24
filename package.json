@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "watch:veil": "tsx watch scripts/build/veil.ts --watch",
-    "build:veil": "tsx build scripts/build/veil.ts",
+    "build:veil": "tsx scripts/build/veil.ts",
     "proxy": "tsx watch scripts/proxy.ts",
     "watch": "concurrently --raw \"npm run proxy\" \"npm run watch:veil\""
   },
@@ -22,7 +22,7 @@
     "esbuild": "^0.24.0",
     "tsx": "^4.19.2",
     "ws": "^8.18.0"
-  },
+  },  
   "dependencies": {
     "@hono/node-server": "^1.13.7",
     "esbuild-sass-plugin": "^3.3.1",
