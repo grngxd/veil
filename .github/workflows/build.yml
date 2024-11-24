@@ -10,29 +10,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Set up Node.js environment
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      # Install pnpm globally
       - name: Install pnpm
         run: npm install -g pnpm
 
-      # Install dependencies using pnpm
       - name: Install Dependencies
         run: pnpm install
 
-      # Build Veil using pnpm
       - name: Build Veil
         run: pnpm run build:veil
 
-      # Create a GitHub release
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -44,7 +38,6 @@ jobs:
           draft: false
           prerelease: false
 
-      # Upload veil.js to the release
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
         env:
