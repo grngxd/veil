@@ -80,7 +80,7 @@ const SettingsPage = () => {
                             section: "skibidi",
                             searchableTitles: ["skibidi"],
                             label: "skibidi",
-                        });
+                        }); 
                     }}
                 >
                     test

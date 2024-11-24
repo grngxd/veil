@@ -41,3 +41,5 @@ export const renderPreactInReact = <P extends {} = {}>(
         props
     });
 };
+
+export * from "./";

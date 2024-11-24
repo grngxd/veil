@@ -19,7 +19,7 @@ export const enabledPlugins = computed(plugins, (p) =>
     Array.from(p.values()).filter((plugin) => plugin.metadata?.enabled)
 );
 
-let cb;
+let cb: () => void;
 
 export const init = async () => {
     const raw = localStorage.getItem("VEIL_PLUGINS") || "{}";
@@ -64,7 +64,7 @@ export const unload = () => {
             plugin.unload();
         } catch (e) {
             error(['Error unloading plugin:', e]);
-        }
+        }  
     });
 }; 
 

@@ -1,4 +1,5 @@
 import * as react from "+react";
+import * as bridge from "+react/bridge";
 import components from "+react/components";
 import * as util from "+util";
 import { log, warn } from "+util";
@@ -49,6 +50,7 @@ window.veil = {
     ui: {
         preact,
         react: react.React,
+        bridge,
         reactDOM: react.ReactDOM, 
         components
     },  
