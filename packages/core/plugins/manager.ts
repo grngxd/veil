@@ -6,17 +6,19 @@ import { atom, computed } from "nanostores";
 type Plugin = {
     init: () => void;
     unload: () => void;
-    metadata?: PluginMetadata;
+    metadata: PluginMetadata;
 };
 
 type PluginMetadata = {
-    link: string;
+    name: string;
+    description: string;
+    id: string;
     enabled: boolean;
 };
 
 export const plugins = atom<Map<string, Plugin>>(new Map());
 export const enabledPlugins = computed(plugins, (p) =>
-    Array.from(p.values()).filter((plugin) => plugin.metadata?.enabled)
+    Array.from(p.values()).filter((plugin) => plugin.metadata.enabled)
 );
 
 let unsubscribe: () => void;
@@ -30,7 +32,7 @@ export const init = async () => {
             const plugin = await add(url, false);
             if (plugin && metadata.enabled) {
                 plugin.init();
-                updatePluginMetadata(url, metadata);
+                updatePluginMetadata(metadata.id, metadata);
             }
         });
 
@@ -38,8 +40,8 @@ export const init = async () => {
 
         unsubscribe = plugins.subscribe((currentPlugins) => {
             const metadata = Object.fromEntries(
-                Array.from(currentPlugins.entries()).map(([url, plugin]) => [
-                    url,
+                Array.from(currentPlugins.entries()).map(([id, plugin]) => [
+                    id,
                     plugin.metadata,
                 ])
             );
@@ -64,12 +66,16 @@ export const unload = () => {
 };
 
 export const add = async (url: string, alsoInit = true): Promise<Plugin | null> => {
-    const trimmedUrl = url.trim();
-    try {
-        const response = await util.fetch(trimmedUrl);
-        if (!response.ok) throw new Error(`Failed to fetch plugin from ${trimmedUrl}`);
+    const trimmedUrl = url.trim().replace(/\/$/, '');
+    try { 
+        const scriptRes = await util.fetch(`${trimmedUrl}/index.js`);
+        const metadataRes = await util.fetch(`${trimmedUrl}/meta.json`);
 
-        const code = await response.text();
+        if (!scriptRes.ok || !metadataRes.ok) throw new Error(`Failed to fetch plugin from ${trimmedUrl}`);
+        
+        const code = await scriptRes.text();
+        const meta = await metadataRes.json();
+
         const blob = new Blob([code], { type: 'application/javascript' });
         const blobUrl = URL.createObjectURL(blob);
 
@@ -83,10 +89,10 @@ export const add = async (url: string, alsoInit = true): Promise<Plugin | null> 
         const newPlugin: Plugin = {
             init: module.init,
             unload: module.unload,
-            metadata: { link: trimmedUrl, enabled: true },
+            metadata: { ...meta, enabled: true },
         };
 
-        plugins.set(new Map(plugins.get()).set(trimmedUrl, newPlugin));
+        plugins.set(new Map(plugins.get()).set(meta.id, newPlugin));
 
         if (alsoInit) newPlugin.init();
 
@@ -97,11 +103,11 @@ export const add = async (url: string, alsoInit = true): Promise<Plugin | null> 
     }
 };
 
-const updatePluginMetadata = (url: string, metadata: PluginMetadata) => {
+const updatePluginMetadata = (id: string, metadata: PluginMetadata) => {
     const currentPlugins = plugins.get();
-    const plugin = currentPlugins.get(url);
+    const plugin = currentPlugins.get(id);
     if (plugin) {
-        currentPlugins.set(url, { ...plugin, metadata });
+        currentPlugins.set(id, { ...plugin, metadata });
         plugins.set(new Map(currentPlugins));
     }
 };
