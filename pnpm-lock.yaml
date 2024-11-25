@@ -70,6 +70,9 @@ importers:
       '@emotion/css':
         specifier: ^11.13.5
         version: 11.13.5
+      '@nanostores/preact':
+        specifier: ^0.5.2
+        version: 0.5.2(nanostores@0.11.3)(preact@10.24.3)
       preact:
         specifier: ^10.24.3
         version: 10.24.3
@@ -534,6 +537,13 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
+
+  '@nanostores/preact@0.5.2':
+    resolution: {integrity: sha512-DZ5G0UuHTJ8NNS8I3Jd6f4RCcWIl4siYD+vaV6jQf0T6xJ3QqTSkJkYNQTZK7O+7NC/mzaLkomyLQqD+w1E0Tg==}
+    engines: {node: ^18.0.0 || >=20.0.0}
+    peerDependencies:
+      nanostores: ^0.9.0 || ^0.10.0 || ^0.11.0
+      preact: '>=10.0.0'
 
   '@parcel/watcher-android-arm64@2.5.0':
     resolution: {integrity: sha512-qlX4eS28bUcQCdribHkg/herLe+0A9RyYC+mm2PXpncit8z5b3nSqGVzMNR3CmtAOgRutiZ02eIJJgP/b1iEFQ==}
@@ -1491,6 +1501,11 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
+
+  '@nanostores/preact@0.5.2(nanostores@0.11.3)(preact@10.24.3)':
+    dependencies:
+      nanostores: 0.11.3
+      preact: 10.24.3
 
   '@parcel/watcher-android-arm64@2.5.0':
     optional: true

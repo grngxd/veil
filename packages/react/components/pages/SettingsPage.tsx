@@ -3,7 +3,8 @@ import settings from "+core/settings";
 import { renderPreactInReact } from "+react/bridge";
 import stores from "+store";
 import { css } from "@emotion/css";
-import { h } from "preact";
+import { useStore } from '@nanostores/preact';
+import { Fragment, h } from "preact";
 import { useState } from "preact/hooks";
 import { generate } from "short-uuid";
 import Button from "../Button";
@@ -13,6 +14,7 @@ import Toggle from "../Toggle";
 
 const SettingsPage = () => {
     const [link, setLink] = useState("");
+    const pluginStore = useStore(plugins.plugins);
 
     return (
         <div
@@ -55,12 +57,12 @@ const SettingsPage = () => {
                             >
                                 {description}
                             </Text>
-                        </div>
+                        </div> 
 
                         {typeof store.get() === "boolean" ? (
                             <Toggle
                                 checked={store.get()}
-                                onChange={(value) => store.set(value)}
+                                onChange={(value) => plugins.setPluginEnabled(key, value)}
                             />
                         ) : (
                             <TextBox
@@ -74,8 +76,7 @@ const SettingsPage = () => {
                 <Button
                     onClick={() => {
                         settings.addCustomElement({
-                            element: () =>
-                                renderPreactInReact(() => <Text type="h1">skibidi id: {generate()}</Text>),
+                            element: () => renderPreactInReact(() => <Text type="h1">skibidi id: {generate()}</Text>),
                             section: "skibidi",
                             searchableTitles: ["skibidi"],
                             label: "skibidi",
@@ -141,6 +142,76 @@ const SettingsPage = () => {
                     >
                         Add
                     </Button>
+                </div>
+
+                <div
+                    class={css({
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "0.5rem",
+                    })}
+                >
+                    <Text type="h2">Plugins</Text>
+                    {Array.from(pluginStore.values()).length === 0 && (
+                        <>
+                            <Text
+                                type="h3"
+                            >
+                                No plugins installed...
+                            </Text>
+                            <Text
+                                className={css({
+                                    color: "var(--text-muted)",
+                                })}
+                            >
+                                Add a plugin by providing the URL to the plugin's JavaScript file. The plugin will be loaded and
+                                executed in the client.
+                            </Text>
+                        </>
+                    )}
+                    {Array.from(pluginStore.values()).map((plugin) => (
+                        <div
+                            key={plugin.metadata.id}
+                            class={css({
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                padding: "0.5rem",
+                                border: "1px solid var(--background-modifier-accent)",
+                                borderRadius: "0.5rem",
+                            })}
+                        >
+                            <div
+                                class={css({
+                                    display: "flex",
+                                    flexDirection: "column",
+                                })}
+                            >
+                                <Text type="h3">{plugin.metadata.name}</Text>
+                                <Text
+                                    className={css({
+                                        color: "var(--text-muted)",
+                                    })}
+                                >
+                                    {plugin.metadata.id}
+                                </Text>
+                                <Text
+                                    className={css({
+                                        color: "var(--text-muted)",
+                                    })}
+                                >
+                                    {plugin.metadata.description}
+                                </Text>
+                            </div>
+                            <Toggle
+                                checked={plugin.metadata.enabled}
+                                onChange={(value) => {  
+                                    plugins.setPluginEnabled(plugin.metadata.id, value);
+                                    plugins.plugins.set(new Map(plugins.plugins.get()));
+                                }}
+                            />
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>

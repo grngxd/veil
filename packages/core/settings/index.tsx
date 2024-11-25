@@ -50,7 +50,7 @@ export const removeCustomElement = (element: Partial<CustomElement>) => {
 
 export const init = () => {
     getDispatcher()
-        .waitForDispatch("USER_SETTINGS_MODAL_OPEN")
+        ?.waitForDispatch("USER_SETTINGS_MODAL_OPEN")
         .then(async () => {
             if (!window?.veil) return;
             // this makes sure only 1 instance of veil is running
