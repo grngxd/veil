@@ -98,7 +98,7 @@ export const add = async (url: string, alsoInit = true): Promise<Plugin | null> 
                     meta.enabled = false;
                     return null;
                 }
-            } else {
+            } else { 
                 return existingPlugin;
             }
         }  

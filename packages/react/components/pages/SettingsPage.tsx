@@ -31,17 +31,26 @@ const PluginItem = ({ plugin }: { plugin: Plugin }) => {
                     flexDirection: "column",
                 })}
             >
-                <Text type="h3">{plugin.metadata.name}</Text>
-                <Text
-                    className={css({
-                        color: "var(--text-muted)",
+                <div
+                    class={css({
+                        display: "flex",
+                        gap: "0.5ch",
+                        alignItems: "center",
                     })}
                 >
-                    {plugin.metadata.id}
-                </Text>
+                    <Text type="h3">{plugin.metadata.name}</Text>
+                    <Text
+                        className={css({
+                            color: "var(--text-muted)",
+                        })}
+                    >
+                        ({plugin.metadata.id})
+                    </Text>
+                </div>
                 <Text
                     className={css({
                         color: "var(--text-muted)",
+                        marginTop: "-0.25rem",
                     })}
                 >
                     {plugin.metadata.description}
@@ -50,18 +59,11 @@ const PluginItem = ({ plugin }: { plugin: Plugin }) => {
             <div
                 class={css({
                     display: "flex",
-                    flexDirection: "column",
-                    alignItems: "flex-end",
+                    justifyContent: "flex-end",
+                    alignItems: "center",
                     gap: "0.375rem",
                 })}
             >
-                <Toggle
-                    checked={plugin.metadata.enabled}
-                    onChange={(value) => {
-                        plugins.setPluginEnabled(plugin.metadata.id, value);
-                        plugins.plugins.set(new Map(plugins.plugins.get()));
-                    }}
-                />
                 <Button
                     colour="red"
                     onClick={() => {
@@ -70,6 +72,14 @@ const PluginItem = ({ plugin }: { plugin: Plugin }) => {
                 >
                     Remove
                 </Button>
+
+                <Toggle
+                    checked={plugin.metadata.enabled}
+                    onChange={(value) => {
+                        plugins.setPluginEnabled(plugin.metadata.id, value);
+                        plugins.plugins.set(new Map(plugins.plugins.get()));
+                    }}
+                />
             </div>
         </div>
     );
@@ -157,10 +167,10 @@ const SettingsPage = () => {
                                 checked={store.get()}
                                 onChange={(value) => store.set(value)}
                             />
-                        ) : (
+                        ) : ( 
                             <TextBox
                                 value={String(store.get())}
-                                onChange={(v) => setLink(v)}
+                                onChange={(v) => store.set(v)}
                             />
                         )}
                     </div>
@@ -222,6 +232,11 @@ const SettingsPage = () => {
                         })}
                         value={link}
                         onChange={(v) => setLink(v)}
+                        onSubmit={() => {
+                            if (link.trim() === "") return;
+                            plugins.add(link.trim());
+                            setLink("");
+                        }}
                     />
 
                     <Button

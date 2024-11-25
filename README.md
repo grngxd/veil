@@ -21,3 +21,8 @@ a bad discord client mod inspired by [shelter]("https://shelter.uwu.network").
 1. copy & paste the contents of `veil.js` into the console of the discord web client.
 2. youre done
 </details>
+
+## screenshots
+
+## plugins
+find the template [here](https://github.com/grngxd/veil-plugin-template).
