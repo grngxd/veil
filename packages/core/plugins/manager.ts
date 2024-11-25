@@ -91,10 +91,15 @@ export const add = async (url: string, alsoInit = true): Promise<Plugin | null> 
         const newHash = await hashCode(code);
 
         const existingPlugin = plugins.get().get(meta.id);
-        if (existingPlugin && existingPlugin.metadata.hash !== newHash) {
-            const confirmUpdate = confirm(`The plugin at ${trimmedUrl} has been updated. Do you want to allow the updated code?`);
-            if (!confirmUpdate) {
-                meta.enabled = false;
+        if (existingPlugin) {
+            if (existingPlugin.metadata.hash !== newHash) {
+                const confirmUpdate = confirm(`The plugin at ${trimmedUrl} has been updated. Do you want to allow the updated code?`);
+                if (!confirmUpdate) {
+                    meta.enabled = false;
+                    return null;
+                }
+            } else {
+                return existingPlugin;
             }
         }
 

@@ -1,3 +1,4 @@
+import type { Plugin } from "+core/plugins";
 import * as plugins from "+core/plugins";
 import settings from "+core/settings";
 import { renderPreactInReact } from "+react/bridge";
@@ -11,6 +12,98 @@ import Button from "../Button";
 import Text from "../Text";
 import TextBox from "../TextBox";
 import Toggle from "../Toggle";
+
+const PluginItem = ({ plugin }: { plugin: Plugin }) => {
+    return (
+        <div
+            class={css({
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: "1rem",
+                border: "1px solid var(--background-modifier-accent)",
+                borderRadius: "0.5rem",
+            })}
+        >
+            <div
+                class={css({
+                    display: "flex",
+                    flexDirection: "column",
+                })}
+            >
+                <Text type="h3">{plugin.metadata.name}</Text>
+                <Text
+                    className={css({
+                        color: "var(--text-muted)",
+                    })}
+                >
+                    {plugin.metadata.id}
+                </Text>
+                <Text
+                    className={css({
+                        color: "var(--text-muted)",
+                    })}
+                >
+                    {plugin.metadata.description}
+                </Text>
+            </div>
+            <div
+                class={css({
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-end",
+                    gap: "0.375rem",
+                })}
+            >
+                <Toggle
+                    checked={plugin.metadata.enabled}
+                    onChange={(value) => {
+                        plugins.setPluginEnabled(plugin.metadata.id, value);
+                        plugins.plugins.set(new Map(plugins.plugins.get()));
+                    }}
+                />
+                <Button
+                    colour="red"
+                    onClick={() => {
+                        plugins.remove(plugin.metadata.id);
+                    }}
+                >
+                    Remove
+                </Button>
+            </div>
+        </div>
+    );
+};
+
+const PluginList = ({ plugins }: { plugins: Plugin[] }) => {
+    return (
+        <div
+            class={css({
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.5rem",
+            })}
+        >
+            <Text type="h2">Plugins</Text>
+            {plugins.length === 0 && (
+                <>
+                    <Text type="h3">No plugins installed...</Text>
+                    <Text
+                        className={css({
+                            color: "var(--text-muted)",
+                        })}
+                    >
+                        Add a plugin by providing the URL to the plugin's JavaScript file. The plugin will be loaded and
+                        executed in the client.
+                    </Text>
+                </>
+            )}
+            {plugins.map((plugin) => (
+                <PluginItem key={plugin.metadata.id} plugin={plugin} />
+            ))}
+        </div>
+    );
+};
 
 const SettingsPage = () => {
     const [link, setLink] = useState("");
@@ -57,7 +150,7 @@ const SettingsPage = () => {
                             >
                                 {description}
                             </Text>
-                        </div> 
+                        </div>
 
                         {typeof store.get() === "boolean" ? (
                             <Toggle
@@ -76,7 +169,8 @@ const SettingsPage = () => {
                 <Button
                     onClick={() => {
                         settings.addCustomElement({
-                            element: () => renderPreactInReact(() => <Text type="h1">skibidi id: {generate()}</Text>),
+                            element: () =>
+                                renderPreactInReact(() => <Text type="h1">skibidi id: {generate()}</Text>),
                             section: "skibidi",
                             searchableTitles: ["skibidi"],
                             label: "skibidi",
@@ -144,93 +238,7 @@ const SettingsPage = () => {
                     </Button>
                 </div>
 
-                <div
-                    class={css({
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "0.5rem",
-                    })}
-                >
-                    <Text type="h2">Plugins</Text>
-                    {Array.from(pluginStore.values()).length === 0 && (
-                        <>
-                            <Text
-                                type="h3"
-                            >
-                                No plugins installed...
-                            </Text>
-                            <Text
-                                className={css({
-                                    color: "var(--text-muted)",
-                                })}
-                            >
-                                Add a plugin by providing the URL to the plugin's JavaScript file. The plugin will be loaded and
-                                executed in the client.
-                            </Text>
-                        </>
-                    )}
-                    {Array.from(pluginStore.values()).map((plugin) => (
-                        <div
-                            key={plugin.metadata.id}
-                            class={css({
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "center",
-                                padding: "1rem",
-                                border: "1px solid var(--background-modifier-accent)",
-                                borderRadius: "0.5rem",
-                            })}
-                        >
-                            <div
-                                class={css({
-                                    display: "flex",
-                                    flexDirection: "column",
-                                })}
-                            >
-                                <Text type="h3">{plugin.metadata.name}</Text>
-                                <Text
-                                    className={css({
-                                        color: "var(--text-muted)",
-                                    })}
-                                >
-                                    {plugin.metadata.id}
-                                </Text>
-                                <Text
-                                    className={css({
-                                        color: "var(--text-muted)",
-                                    })}
-                                >
-                                    {plugin.metadata.description}
-                                </Text>
-                            </div>
-                            <div
-                                class={css({
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    alignItems: "flex-end",
-                                    gap: "0.375rem", 
-                                })}  
-                            >
-                                <Toggle
-                                    checked={plugin.metadata.enabled}
-                                    onChange={(value) => {  
-                                        plugins.setPluginEnabled(plugin.metadata.id, value);
-                                        plugins.plugins.set(new Map(plugins.plugins.get()));
-                                    }}
-                                />
-
-                                <Button
-                                    colour="red"
-                                    onClick={() => {
-                                        plugins.remove(plugin.metadata.id);
-                                    }}
-                                >
-                                    Remove
-                                </Button>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+                <PluginList plugins={Array.from(pluginStore.values())} />
             </div>
         </div>
     );
