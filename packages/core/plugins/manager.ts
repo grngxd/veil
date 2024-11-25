@@ -32,8 +32,11 @@ export const init = async () => {
 
         const pluginPromises = Object.entries(storedPlugins).map(async ([id, metadata]) => {
             const plugin = await add(metadata.url, false);
-            if (plugin && metadata.enabled) {
-                plugin.init();
+            if (plugin) {
+                plugin.metadata.enabled = metadata.enabled;
+                if (metadata.enabled) {
+                    plugin.init();
+                }
                 updatePluginMetadata(metadata.id, metadata);
             }
         });
@@ -109,7 +112,7 @@ export const add = async (url: string, alsoInit = true): Promise<Plugin | null> 
             init: module.init,
             unload: module.unload,
             metadata: { ...meta, enabled: meta.enabled ?? true, url: trimmedUrl, hash: newHash },
-        }; 
+        };
 
         plugins.set(new Map(plugins.get()).set(meta.id, newPlugin));
 
@@ -140,7 +143,6 @@ const updatePluginMetadata = (id: string, metadata: PluginMetadata) => {
         plugins.set(new Map(currentPlugins));
     }
 };
-
 
 export const setPluginEnabled = (id: string, enabled: boolean) => {
     const currentPlugins = plugins.get();

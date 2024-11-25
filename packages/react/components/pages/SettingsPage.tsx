@@ -122,7 +122,7 @@ const SettingsPage = () => {
                     })}
                 >
                     <TextBox
-                        placeholder="https://imperialb.in/r/zarzboox"
+                        placeholder="https://grngxd.github.io/veil-plugins/example"
                         className={css({
                             flex: 0.9,
                         })}
@@ -176,7 +176,7 @@ const SettingsPage = () => {
                                 display: "flex",
                                 justifyContent: "space-between",
                                 alignItems: "center",
-                                padding: "0.5rem",
+                                padding: "1rem",
                                 border: "1px solid var(--background-modifier-accent)",
                                 borderRadius: "0.5rem",
                             })}
@@ -203,13 +203,31 @@ const SettingsPage = () => {
                                     {plugin.metadata.description}
                                 </Text>
                             </div>
-                            <Toggle
-                                checked={plugin.metadata.enabled}
-                                onChange={(value) => {  
-                                    plugins.setPluginEnabled(plugin.metadata.id, value);
-                                    plugins.plugins.set(new Map(plugins.plugins.get()));
-                                }}
-                            />
+                            <div
+                                class={css({
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "flex-end",
+                                    gap: "0.375rem", 
+                                })}  
+                            >
+                                <Toggle
+                                    checked={plugin.metadata.enabled}
+                                    onChange={(value) => {  
+                                        plugins.setPluginEnabled(plugin.metadata.id, value);
+                                        plugins.plugins.set(new Map(plugins.plugins.get()));
+                                    }}
+                                />
+
+                                <Button
+                                    colour="red"
+                                    onClick={() => {
+                                        plugins.remove(plugin.metadata.id);
+                                    }}
+                                >
+                                    Remove
+                                </Button>
+                            </div>
                         </div>
                     ))}
                 </div>
