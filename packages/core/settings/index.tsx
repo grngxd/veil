@@ -5,7 +5,7 @@ import { sleep } from "+util";
 import * as veil from "+veil";
 import type { VNode } from "preact";
 import { generate } from "short-uuid";
-import { getDispatcher } from "../flux/dispatcher";
+import { type Dispatcher, getDispatcher } from "../flux/dispatcher";
 import { abuseWebpack } from "../webpack/webpack";
 type CustomElement = {
     section: string;
@@ -49,8 +49,8 @@ export const removeCustomElement = (element: Partial<CustomElement>) => {
 };
 
 export const init = () => {
-    getDispatcher()
-        ?.waitForDispatch("USER_SETTINGS_MODAL_OPEN")
+    (getDispatcher() as Dispatcher)
+        .waitForDispatch("USER_SETTINGS_MODAL_OPEN")
         .then(async () => {
             if (!window?.veil) return;
             // this makes sure only 1 instance of veil is running

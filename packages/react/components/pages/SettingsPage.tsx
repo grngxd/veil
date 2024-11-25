@@ -155,7 +155,7 @@ const SettingsPage = () => {
                         {typeof store.get() === "boolean" ? (
                             <Toggle
                                 checked={store.get()}
-                                onChange={(value) => plugins.setPluginEnabled(key, value)}
+                                onChange={(value) => store.set(value)}
                             />
                         ) : (
                             <TextBox

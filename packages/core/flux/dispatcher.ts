@@ -5,7 +5,7 @@ import { abuseWebpack } from "../webpack/webpack";
 let dispatcher: Dispatcher | null = null;
 let dispatchBackup: Dispatcher["dispatch"] | null = null;
 
-type Dispatcher = {
+export type Dispatcher = {
     subscribe: (
         event: DispatcherEvent | `${DispatcherEvent}` | string,
         callback: (data: unknown) => void

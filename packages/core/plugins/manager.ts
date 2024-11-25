@@ -101,7 +101,7 @@ export const add = async (url: string, alsoInit = true): Promise<Plugin | null> 
             } else {
                 return existingPlugin;
             }
-        }
+        }  
 
         const blob = new Blob([code], { type: 'application/javascript' });
         const blobUrl = URL.createObjectURL(blob);
