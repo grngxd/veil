@@ -24,5 +24,10 @@ a bad discord client mod inspired by [shelter]("https://shelter.uwu.network").
 
 ## screenshots
 
+<details>
+    <summary>settings menu</summary>
+    <img src="./assets/settings.png" alt="settings menu" width="600">
+</details>
+
 ## plugins
-find the template [here](https://github.com/grngxd/veil-plugin-template).
+find the template [here.](https://github.com/grngxd/veil-plugin-template)
