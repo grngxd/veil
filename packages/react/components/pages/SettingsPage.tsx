@@ -103,7 +103,7 @@ const PluginList = ({ plugins }: { plugins: Plugin[] }) => {
                             color: "var(--text-muted)",
                         })}
                     >
-                        Add a plugin by providing the URL to the plugin's JavaScript file. The plugin will be loaded and
+                        Add a plugin by providing the URL to the plugin's frontend. The plugin will be loaded and
                         executed in the client.
                     </Text>
                 </>
@@ -214,7 +214,7 @@ const SettingsPage = () => {
                             color: "var(--text-muted)",
                         })}
                     >
-                        Add a plugin by providing the URL to the plugin's JavaScript file. The plugin will be loaded and
+                        Add a plugin by providing the URL to the plugin's frontend. The plugin will be loaded and
                         executed in the client.
                     </Text>
                 </div>
