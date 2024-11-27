@@ -38,7 +38,7 @@ settings.init();
 
 plugins.init();
 
-window.veil = {
+const v = {
     util: util, 
     veil: veil,
     flux: flux,
@@ -72,7 +72,10 @@ window.veil = {
             warn("veil unloaded.");
         });
     }
-}; 
+};
+
+window.veil = v;
+export type Veil = typeof v;
 
 log(`veil loaded in ${(performance.now() - initial).toFixed(1)}ms!`);
 alert("veil loaded!");
