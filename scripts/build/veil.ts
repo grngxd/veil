@@ -1,6 +1,7 @@
 import { context } from 'esbuild';
 import { sassPlugin } from 'esbuild-sass-plugin';
 import { inject } from '../inject';
+import { prepublish } from '../prepublish';
 
 const args = process.argv.slice(2);
 const watchMode = args.includes('--watch');
@@ -35,6 +36,7 @@ const watchMode = args.includes('--watch');
         await ctx.watch();
         console.log('Watching...');
     } else {
+        prepublish();
         await ctx.rebuild();
     }
 })();

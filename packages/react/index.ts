@@ -73,7 +73,7 @@ export const init = () => {
         }
     
     } catch (err) {
-        log(["Error initializing React:", err]);
+        log("Error initializing React:", err);
         throw err;
     }
 }
