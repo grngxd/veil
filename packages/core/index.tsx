@@ -17,6 +17,8 @@ while (window.veil?.unload) {
  
 const initial = performance.now();
 
+const enableDevtoolsCheck = util.disableDevtoolsCheck();
+
 // render without reactivity <meta http-equiv="Content-Security-Policy" content="connect-src 'self'" />
 const meta = document.createElement("meta");
 meta.httpEquiv = "Content-Security-Policy";
@@ -62,6 +64,8 @@ const v = {
         // @ts-ignore
         window.veil = null;
 
+        if (enableDevtoolsCheck) enableDevtoolsCheck();
+        
         plugins.unload(); 
 
         Promise.all([ 

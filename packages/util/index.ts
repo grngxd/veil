@@ -60,3 +60,47 @@ export {
 async function fetch(url: string, init?: RequestInit): Promise<Response> {
     return await window.fetch(`http://127.0.0.1:${veil.proxyPort}/${url}`, init);
 }
+
+// thanks again @yellowsink :3
+let devtoolsDisabled = false;
+let devtoolsUnload: (() => void) | null = null;
+export function disableDevtoolsCheck() {
+    if (devtoolsDisabled) return devtoolsUnload;
+    devtoolsDisabled = true;
+
+    if (window.DiscordNative) {
+        // Desktop client
+        DiscordNative.window.setDevtoolsCallbacks(
+            () => {}, 
+            () => {}
+        );
+        return () => {
+            // No unload function needed for DiscordNative
+        };
+    }  
+    // Web client
+    const realDescriptor = Reflect.getOwnPropertyDescriptor(window, "outerWidth");
+
+    // Prevent the website from detecting devtools
+    const success = Reflect.defineProperty(window, "outerWidth", {
+        enumerable: true,
+        configurable: true,
+        get() {
+            throw new Error(":3");
+        },
+    });
+
+    if (success) {
+        const unload = () => {
+            Reflect.defineProperty(window, "outerWidth", realDescriptor as PropertyDescriptor);
+        };
+        devtoolsUnload = unload;
+        return unload;
+    }
+
+    error("failed to prevent devtools detection; you might get logged out");
+
+    return () => {
+        // No unload function needed if prevention failed
+    };
+}
