@@ -1,7 +1,7 @@
 import { generate } from "short-uuid";
 
-const version = "1.1-A1";
-const semver = "1.1.0";
+const version = "1.3-A4";
+const semver = "1.3.4";
 
 const context = generate();
 const proxyPort = 4443;

@@ -1,14 +1,18 @@
 {
-  "name": "veil",
+  "name": "@grng/veil",
   "type": "module",
-  "version": "1.0.0",
+  "version": "1.3.4",
   "description": "",
   "main": "index.js",
+  "files": [
+    "out"
+  ],
   "scripts": {
     "watch:veil": "tsx watch scripts/build/veil.ts --watch",
     "build:veil": "tsx scripts/build/veil.ts",
     "proxy": "tsx watch scripts/proxy.ts",
-    "watch": "concurrently --raw \"npm run proxy\" \"npm run watch:veil\""
+    "watch": "concurrently --raw \"npm run proxy\" \"npm run watch:veil\"",
+    "prepublish": "tsc && tsc-alias"
   },
   "keywords": [],
   "author": "",
@@ -20,9 +24,11 @@
     "concurrently": "^9.1.0",
     "dotenv": "^16.4.5",
     "esbuild": "^0.24.0",
+    "tsc-alias": "^1.8.10",
     "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
     "ws": "^8.18.0"
-  },  
+  },
   "dependencies": {
     "@hono/node-server": "^1.13.7",
     "esbuild-sass-plugin": "^3.3.1",

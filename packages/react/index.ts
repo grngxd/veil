@@ -2,17 +2,17 @@ import { log } from '+util';
 import { abuseWebpack } from "../core/webpack/webpack";
 
 // Basic React types
-type ReactRef<T> = { current: T | null };
-type ReactElement = { type: any, props: any, key: any | null };
+export type ReactRef<T> = { current: T | null };
+export type ReactElement = { type: any, props: any, key: any | null };
 
-interface ReactType {
+export interface ReactType {
     useRef<T>(initialValue: T | null): ReactRef<T>;
     useEffect(effect: () => void | (() => void), deps?: any[]): void;
     createElement(type: any, props?: any, ...children: any[]): ReactElement;
     version: string;
 }
 
-interface ReactDOMType {
+export interface ReactDOMType {
     findDOMNode(element: any): Element | null;
     createPortal(children: any, container: Element): ReactElement;
     render(element: ReactElement, container: Element): void;
