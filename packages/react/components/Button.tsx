@@ -5,7 +5,7 @@ import { type Colour, getColour } from './colour';
 
 type ButtonProps = {
   onClick: () => void;
-  children: ComponentChildren;
+  children?: ComponentChildren;
   colour?: Colour;
   className?: string;
   style?: string | h.JSX.CSSProperties

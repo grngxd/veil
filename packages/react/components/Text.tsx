@@ -3,7 +3,7 @@ import { css, cx } from "@emotion/css";
 import { ComponentChildren, h } from "preact";
 
 type TextProps = {
-    children: ComponentChildren;
+    children?: ComponentChildren;
     type?: TextType;
     className?: string;
     style?: string | h.JSX.CSSProperties;
